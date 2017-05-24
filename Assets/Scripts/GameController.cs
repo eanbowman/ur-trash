@@ -28,7 +28,7 @@ public class GameController : MonoBehaviour {
         // Move the starting player automatically since they have no other moves
         if( whichPlayersTurn == 1 )
         {
-            //this.player1Tokens[0] = this.currentRoll;
+            this.player1Tokens[0] = this.currentRoll;
             InstantiateToken(player1PathStops[0], p1TokenObjects);
             p1TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player1PathStops[this.currentRoll]);
             Debug.Log("Player 1 rolled " + this.currentRoll);
@@ -51,6 +51,10 @@ public class GameController : MonoBehaviour {
 
     void InitializeGame()
     {
+        // Create Player Token Arrays
+        this.player1Tokens = new int[this.numTokens];
+        this.player2Tokens = new int[this.numTokens];
+
         // Zero out the positions for all of each player's tokens
         for (int i = 0; i < this.numTokens; i++)
         {
