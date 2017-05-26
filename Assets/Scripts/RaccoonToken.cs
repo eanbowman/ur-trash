@@ -24,18 +24,14 @@ public class RaccoonToken : MonoBehaviour {
 
     void SetReferences() {
         this.anim = gameObject.GetComponent<Animator>();
-        Debug.Log(this.anim.runtimeAnimatorController);
         this.nav = gameObject.GetComponent<NavMeshAgent>();
     }
 
     public void MoveTo(Transform destination) {
-        Debug.Log(this.anim);
         this.target = destination;
         Vector3 position = new Vector3(destination.position.x, destination.position.y + 1, destination.position.z);
         this.nav.SetDestination(position);
-        Debug.Log(this.nav);
         this.anim.SetBool("Walking", true);
-        Debug.Log("Walking state: " + this.anim.GetBool("Walking"));
     }
 
     void CheckDistanceFromDestination()
@@ -44,12 +40,10 @@ public class RaccoonToken : MonoBehaviour {
         float dist = Vector3.Distance(this.target.position, transform.position);
         if (this.anim.GetBool("Walking") == true)
         {
-            if (dist < 2.0f)
+			if (dist < 1.1f)
             {
                 this.nav.enabled = false;
-                Debug.Log("Walking state: " + this.anim.GetBool("Walking"));
                 this.anim.SetBool("Walking", false);
-                Debug.Log("Walking state: " + this.anim.GetBool("Walking"));
             }
         }
     }
