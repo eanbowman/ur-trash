@@ -30,14 +30,18 @@ public class GameController : MonoBehaviour {
         {
             this.player1Tokens[0] = this.currentRoll;
             InstantiateToken(player1PathStops[0], p1TokenObjects);
-            p1TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player1PathStops[this.currentRoll]);
+            if (this.currentRoll > 0) {
+                p1TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player1PathStops[this.currentRoll]);
+            }
             Debug.Log("Player 1 rolled " + this.currentRoll);
         }
          else
         {
             this.player2Tokens[0] = this.currentRoll;
             InstantiateToken(player2PathStops[0], p2TokenObjects);
-            p2TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player2PathStops[this.currentRoll]);
+            if (this.currentRoll > 0) {
+                p2TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player2PathStops[this.currentRoll]);
+            }
             Debug.Log("Player 2 rolled " + this.currentRoll);
         }
 	}

@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using UnityStandardAssets.Characters.ThirdPerson;
 
 public class RaccoonToken : MonoBehaviour {
-    private Animator animator;
+    private Animator anim;
     private Transform target;
     private NavMeshAgent nav;
 
@@ -16,34 +16,40 @@ public class RaccoonToken : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        CheckDistanceFromDestination();
+        if( this.target != null ) CheckDistanceFromDestination();
+
+        bool jump = Input.GetButtonDown("Fire1");
+        this.anim.SetBool("Jump", jump);
     }
 
     void SetReferences() {
-        this.animator = GetComponent<Animator>();
-        this.nav = GetComponent<NavMeshAgent>();
-        this.animator.Play("Raccoon");
+        this.anim = gameObject.GetComponent<Animator>();
+        Debug.Log(this.anim.runtimeAnimatorController);
+        this.nav = gameObject.GetComponent<NavMeshAgent>();
     }
 
     public void MoveTo(Transform destination) {
-        SetReferences();
+        Debug.Log(this.anim);
         this.target = destination;
-        this.nav.SetDestination(this.target.position);
-        Debug.Log(destination);
-        this.animator.SetBool("Walking", true);
-        Debug.Log("Walking state: " + this.animator.GetBool("Walking"));
+        Vector3 position = new Vector3(destination.position.x, destination.position.y + 1, destination.position.z);
+        this.nav.SetDestination(position);
+        Debug.Log(this.nav);
+        this.anim.SetBool("Walking", true);
+        Debug.Log("Walking state: " + this.anim.GetBool("Walking"));
     }
 
     void CheckDistanceFromDestination()
     {
+        //Debug.Log("destination: " + this.nav.destination + ", pathStatus: " + this.nav.pathStatus);
         float dist = Vector3.Distance(this.target.position, transform.position);
-        if (this.animator.GetBool("Walking") == true)
+        if (this.anim.GetBool("Walking") == true)
         {
-            if (dist < 1.85f)
+            if (false)//dist < 1.85f)
             {
-                Debug.Log("Walking state: " + this.animator.GetBool("Walking"));
-                this.animator.SetBool("Walking", false);
-                Debug.Log("Walking state: " + this.animator.GetBool("Walking"));
+                this.nav.enabled = false;
+                Debug.Log("Walking state: " + this.anim.GetBool("Walking"));
+                this.anim.SetBool("Walking", false);
+                Debug.Log("Walking state: " + this.anim.GetBool("Walking"));
             }
         }
     }

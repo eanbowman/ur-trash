@@ -72,13 +72,13 @@ ModelImporter:
     4300000: raccoon
     4300002: Racoon_Shirt
     7400000: Armature.002|EmptyAction
-    7400002: Armature.002|Raccoon_cry
-    7400004: Armature.002|Raccoon_Run
+    7400002: Raccoon_cry
+    7400004: Raccoon_Run
     7400006: Armature.002|Raccoon_Run.001
-    7400008: Armature.002|Raccoon_Spin_No_Offset
-    7400010: Armature.002|Raccoon_Spin_Offset
-    7400012: Armature.002|Racoon_Idle
-    7400014: Armature.002|Racoon_Jump
+    7400008: Raccoon_Spin_No_Offset
+    7400010: Raccoon_Spin_Offset
+    7400012: Racoon_Idle
+    7400014: Racoon_Jump
     7400016: Armature.002|TextAction
     9500000: //RootNode
     13700000: raccoon
@@ -90,9 +90,11 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleRotations: 1
+    resampleCurves: 1
     optimizeGameObjects: 0
-    motionNodeName: 
+    motionNodeName: Armature.002
+    rigImportErrors: 
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -105,7 +107,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature.002|Raccoon_cry
+      name: Raccoon_cry
       takeName: Armature.002|Raccoon_cry
       firstFrame: 0
       lastFrame: 60
@@ -197,7 +199,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature.002|Raccoon_Run
+      name: Raccoon_Run
       takeName: Armature.002|Raccoon_Run
       firstFrame: 0
       lastFrame: 45
@@ -289,7 +291,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature.002|Raccoon_Spin_No_Offset
+      name: Raccoon_Spin_No_Offset
       takeName: Armature.002|Raccoon_Spin_No_Offset
       firstFrame: 0
       lastFrame: 30
@@ -381,7 +383,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature.002|Raccoon_Spin_Offset
+      name: Raccoon_Spin_Offset
       takeName: Armature.002|Raccoon_Spin_Offset
       firstFrame: 0
       lastFrame: 30
@@ -473,7 +475,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature.002|Racoon_Idle
+      name: Racoon_Idle
       takeName: Armature.002|Racoon_Idle
       firstFrame: 0
       lastFrame: 180
@@ -565,7 +567,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature.002|Racoon_Jump
+      name: Racoon_Jump
       takeName: Armature.002|Racoon_Jump
       firstFrame: 0
       lastFrame: 80
@@ -681,6 +683,7 @@ ModelImporter:
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
+    serializedVersion: 2
     human: []
     skeleton: []
     armTwist: 0.5
@@ -691,7 +694,10 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
   humanoidOversampling: 1

@@ -22,7 +22,6 @@ public class DiceRoller : MonoBehaviour {
 
     /* Only used when this script is attached to a Text GUI object */
     void UpdateText() {
-        diceRoll = transform.GetComponent<Text>();
-        diceRoll.text = "Dice roll: " + this.roll;
+        this.diceRoll.text = "Dice roll: " + this.roll;
     }
 }
