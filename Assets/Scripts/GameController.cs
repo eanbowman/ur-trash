@@ -21,6 +21,8 @@ public class GameController : MonoBehaviour {
     private List<GameObject> p1TokenObjects;
     private List<GameObject> p2TokenObjects;
 
+	private GameObject camera;
+
     void Start () {
         InitializeGame();
         this.currentRoll = dice.Roll();
@@ -31,6 +33,7 @@ public class GameController : MonoBehaviour {
             this.player1Tokens[0] = this.currentRoll;
 			this.currentRoll = 15;
             InstantiateToken(player1PathStops[0], p1TokenObjects);
+			camera.GetComponent<CameraFollow> ().SetFollowTarget (p1TokenObjects [0]);
             if (this.currentRoll > 0) {
                 p1TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player1PathStops[this.currentRoll]);
             }
@@ -69,6 +72,8 @@ public class GameController : MonoBehaviour {
 
         p1TokenObjects = new List<GameObject>();
         p2TokenObjects = new List<GameObject>();
+
+		this.camera = GameObject.FindGameObjectsWithTag("MainCamera")[0];
     }
 
     int TokensInPlay(int[] playerTokens)
