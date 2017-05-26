@@ -44,7 +44,7 @@ public class RaccoonToken : MonoBehaviour {
         float dist = Vector3.Distance(this.target.position, transform.position);
         if (this.anim.GetBool("Walking") == true)
         {
-            if (false)//dist < 1.85f)
+            if (dist < 2.0f)
             {
                 this.nav.enabled = false;
                 Debug.Log("Walking state: " + this.anim.GetBool("Walking"));
