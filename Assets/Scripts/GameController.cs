@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour {
     public Transform[] player1PathStops; // the positions in game space of the game board stops
     public Transform[] player2PathStops; // the positions in game space of the game board stops
     public GameObject tokenPrefab;
+	public int m_StartWait = 3; 
 
     private bool gameOver = false;
     private int player1Points = 0;
@@ -25,28 +26,31 @@ public class GameController : MonoBehaviour {
 
     void Start () {
         InitializeGame();
-        this.currentRoll = dice.Roll();
+		RollDice ();
+		PlayerTurn (whichPlayersTurn);
+	}
 
-        // Move the starting player automatically since they have no other moves
-        if( whichPlayersTurn == 1 )
-        {
-            this.player1Tokens[0] = this.currentRoll;
+	private void PlayerTurn( int player ) {
+		if( whichPlayersTurn == 1 ) {
+			this.player1Tokens[0] = this.currentRoll;
 			InstantiateToken(player1PathStops[0], p1TokenObjects);
 			camera.GetComponent<CameraFollow> ().SetFollowTarget (p1TokenObjects [0]);
-            if (this.currentRoll > 0) {
-                p1TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player1PathStops[this.currentRoll]);
-            }
-            Debug.Log("Player 1 rolled " + this.currentRoll);
-        }
-         else
-        {
-            this.player2Tokens[0] = this.currentRoll;
-            InstantiateToken(player2PathStops[0], p2TokenObjects);
-            if (this.currentRoll > 0) {
-                p2TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player2PathStops[this.currentRoll]);
-            }
-            Debug.Log("Player 2 rolled " + this.currentRoll);
-        }
+			if (this.currentRoll > 0) {
+				p1TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player1PathStops[this.currentRoll]);
+			}
+			Debug.Log("Player 1 rolled " + this.currentRoll);            
+		} else {
+			this.player2Tokens[0] = this.currentRoll;
+			InstantiateToken(player2PathStops[0], p2TokenObjects);
+			if (this.currentRoll > 0) {
+				p2TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player2PathStops[this.currentRoll]);
+			}
+			Debug.Log("Player 2 rolled " + this.currentRoll);
+		}
+	}
+
+	private void RollDice () {
+		this.currentRoll = dice.Roll();
 	}
 
     void InstantiateToken(Transform target, List<GameObject> objects)
