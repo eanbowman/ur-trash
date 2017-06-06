@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: d02e42048406d914fad32e976f022c1a
+timeCreated: 1496755525
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Janda Manatee Solid
+  fontNames:
+  - Janda Manatee Solid
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
