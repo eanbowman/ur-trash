@@ -32,6 +32,7 @@ public class GameController : MonoBehaviour {
 
 	private void PlayerTurn( int player ) {
 		if( whichPlayersTurn == 1 ) {
+			this.currentRoll = 14;
 			this.player1Tokens[0] = this.currentRoll;
 			InstantiateToken(player1PathStops[0], p1TokenObjects);
 			camera.GetComponent<CameraFollow> ().SetFollowTarget (p1TokenObjects [0]);
