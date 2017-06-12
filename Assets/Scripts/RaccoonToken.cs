@@ -6,12 +6,13 @@ using UnityEngine.AI;
 using UnityStandardAssets.Characters.ThirdPerson;
 
 public class RaccoonToken : MonoBehaviour {
-    [HideInInspector] public int playerNumber;
+    public int playerNumber;
     private Animator anim;
     private Transform target;
     private NavMeshAgent nav;
     private GameController gameController;
     private Transform[] pathway;
+    private bool isJumping;
 
     // Use this for initialization
     void Awake () {
@@ -24,6 +25,9 @@ public class RaccoonToken : MonoBehaviour {
             CheckDistanceFromDestination();
             CheckIfWeNeedToJump(GetCurrentGameSquare(), this.gameController);
         }
+        if (this.anim.GetCurrentAnimatorStateInfo(0).IsName("Jump")) Debug.Log("Jumping");
+
+        if (this.isJumping) this.anim.SetBool("Jump", this.isJumping);
     }
 
     void SetReferences() {
@@ -32,6 +36,7 @@ public class RaccoonToken : MonoBehaviour {
         this.nav = gameObject.GetComponent<NavMeshAgent>();
         gameControllerObject = GameObject.FindGameObjectsWithTag("GameController")[0];
         this.gameController = gameControllerObject.GetComponent<GameController>();
+        this.isJumping = false;
         if (this.playerNumber == 1) {
             pathway = gameController.player1PathStops;
         } else
@@ -42,14 +47,6 @@ public class RaccoonToken : MonoBehaviour {
 
     public void SetPlayerNumber(int number ) {
         this.playerNumber = number;
-    }
-
-    public void PlayJumpAnimation() {
-        this.anim.SetBool("Jump", true);
-    }
-
-    public void StopJumpAnimation() {
-        this.anim.SetBool("Jump", false);
     }
 
     public void MoveTo(Transform destination) {
@@ -68,11 +65,11 @@ public class RaccoonToken : MonoBehaviour {
         Transform[] jumpSpots = gameController.jumpSpots;
         for (int i = 0 ; i < jumpSpots.Length; i++) {
             if(closestSquare.name == jumpSpots[i].name) {
-                PlayJumpAnimation();
+                this.isJumping = true;
                 //Debug.Log("Jumping! " + closestSquare.name + " == " + jumpSpots[i].name);
             }
         }
-        StopJumpAnimation();
+        this.isJumping = false;
     }
 
     GameObject GetClosestGameObject(Transform[] otherTransforms) {
