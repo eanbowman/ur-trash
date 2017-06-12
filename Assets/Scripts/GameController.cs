@@ -36,6 +36,7 @@ public class GameController : MonoBehaviour {
 			this.currentRoll = 14;
 			this.player1Tokens[0] = this.currentRoll;
 			InstantiateToken(player1PathStops[0], p1TokenObjects);
+            this.p1TokenObjects[0].GetComponent<RaccoonToken>().SetPlayerNumber(1);
 			camera.GetComponent<CameraFollow> ().SetFollowTarget (p1TokenObjects [0]);
 			if (this.currentRoll > 0) {
 				p1TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player1PathStops[this.currentRoll]);
@@ -44,7 +45,8 @@ public class GameController : MonoBehaviour {
 		} else {
 			this.player2Tokens[0] = this.currentRoll;
 			InstantiateToken(player2PathStops[0], p2TokenObjects);
-			if (this.currentRoll > 0) {
+            this.p2TokenObjects[0].GetComponent<RaccoonToken>().SetPlayerNumber(2);
+            if (this.currentRoll > 0) {
 				p2TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player2PathStops[this.currentRoll]);
 			}
 			Debug.Log("Player 2 rolled " + this.currentRoll);

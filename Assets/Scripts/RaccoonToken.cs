@@ -6,13 +6,15 @@ using UnityEngine.AI;
 using UnityStandardAssets.Characters.ThirdPerson;
 
 public class RaccoonToken : MonoBehaviour {
+    [HideInInspector] public int playerNumber;
     private Animator anim;
     private Transform target;
     private NavMeshAgent nav;
     private GameController gameController;
+    private Transform[] pathway;
 
-	// Use this for initialization
-	void Awake () {
+    // Use this for initialization
+    void Awake () {
         SetReferences();
     }
 	
@@ -20,25 +22,33 @@ public class RaccoonToken : MonoBehaviour {
 	void Update () {
         if (this.target != null) {
             CheckDistanceFromDestination();
-            GetCurrentGameSquare();
-            CheckIfWeNeedToJump();
+            CheckIfWeNeedToJump(GetCurrentGameSquare(), this.gameController);
         }
     }
 
     void SetReferences() {
-        GameObject gameObjects;
+        GameObject gameControllerObject;
         this.anim = gameObject.GetComponent<Animator>();
         this.nav = gameObject.GetComponent<NavMeshAgent>();
-        gameObjects = GameObject.FindGameObjectsWithTag("GameController")[0];
-        this.gameController = gameObjects.GetComponent<GameController>();
+        gameControllerObject = GameObject.FindGameObjectsWithTag("GameController")[0];
+        this.gameController = gameControllerObject.GetComponent<GameController>();
+        if (this.playerNumber == 1) {
+            pathway = gameController.player1PathStops;
+        } else
+        {
+            pathway = gameController.player2PathStops;
+        }
+    }
+
+    public void SetPlayerNumber(int number ) {
+        this.playerNumber = number;
     }
 
     public void PlayJumpAnimation() {
         this.anim.SetBool("Jump", true);
     }
 
-    public void StopJumpAnimation()
-    {
+    public void StopJumpAnimation() {
         this.anim.SetBool("Jump", false);
     }
 
@@ -49,13 +59,37 @@ public class RaccoonToken : MonoBehaviour {
         this.anim.SetBool("Walking", true);
     }
 
-    void GetCurrentGameSquare() {
-
+    GameObject GetCurrentGameSquare() {
+        GameObject closestSquare = GetClosestGameObject(pathway);
+        return closestSquare;
     }
 
-    void CheckIfWeNeedToJump() {
-        //Transform nextJump = 
-        float dist = Vector3.Distance(this.target.position, transform.position);
+    void CheckIfWeNeedToJump(GameObject closestSquare, GameController gameController) {
+        Transform[] jumpSpots = gameController.jumpSpots;
+        for (int i = 0 ; i < jumpSpots.Length; i++) {
+            if(closestSquare.name == jumpSpots[i].name) {
+                PlayJumpAnimation();
+                //Debug.Log("Jumping! " + closestSquare.name + " == " + jumpSpots[i].name);
+            }
+        }
+        StopJumpAnimation();
+    }
+
+    GameObject GetClosestGameObject(Transform[] otherTransforms) {
+        GameObject closestTarget = null;
+        // Set the initial closest distance really high. We don't want to return null.
+        float closestDistance = 1000;
+ 
+        for(int i = 0; i < otherTransforms.Length; i++) {
+            float distanceFromTarget = Vector3.Distance(transform.position, otherTransforms[i].position);
+            if(distanceFromTarget < closestDistance) {
+                // We have a new closest target.
+                closestTarget = otherTransforms[i].gameObject;
+                closestDistance = distanceFromTarget;
+            }
+        }
+
+        return closestTarget;
     }
 
     void CheckDistanceFromDestination()
