@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour {
     public Transform[] player2PathStops; // the positions in game space of the game board stops
     public GameObject tokenPrefab;
 	public int m_StartWait = 3; 
+    public Transform[] jumpSpots; // The positions on the map where a jump is required
 
     private bool gameOver = false;
     private int player1Points = 0;
