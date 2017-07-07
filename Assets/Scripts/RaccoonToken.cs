@@ -25,9 +25,8 @@ public class RaccoonToken : MonoBehaviour {
             CheckDistanceFromDestination();
             CheckIfWeNeedToJump(GetCurrentGameSquare(), this.gameController);
         }
-        if (this.anim.GetCurrentAnimatorStateInfo(0).IsName("Jump")) Debug.Log("Jumping");
 
-        if (this.isJumping) this.anim.SetBool("Jump", this.isJumping);
+        this.anim.SetBool ("Jump", this.isJumping);
     }
 
     void SetReferences() {
@@ -63,13 +62,13 @@ public class RaccoonToken : MonoBehaviour {
 
     void CheckIfWeNeedToJump(GameObject closestSquare, GameController gameController) {
         Transform[] jumpSpots = gameController.jumpSpots;
+		isJumping = false;
         for (int i = 0 ; i < jumpSpots.Length; i++) {
             if(closestSquare.name == jumpSpots[i].name) {
-                this.isJumping = true;
-                //Debug.Log("Jumping! " + closestSquare.name + " == " + jumpSpots[i].name);
+                isJumping = true;
+				Debug.Log("Jumping! " + closestSquare.name + " == " + jumpSpots[i].name);
             }
         }
-        this.isJumping = false;
     }
 
     GameObject GetClosestGameObject(Transform[] otherTransforms) {
