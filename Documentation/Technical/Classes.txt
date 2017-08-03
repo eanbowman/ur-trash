@@ -1,0 +1,8 @@
+RaccoonToken
+	Has a destination
+	Has a next waypoint to reach
+	Has a path to follow
+
+Path
+	Has waypoints
+

@@ -9,6 +9,7 @@ public class RaccoonToken : MonoBehaviour {
     public int playerNumber;
     private Animator anim;
     private Transform target;
+	public Pathway pathway;
     private NavMeshAgent nav;
     private GameController gameController;
     private Transform[] pathway;

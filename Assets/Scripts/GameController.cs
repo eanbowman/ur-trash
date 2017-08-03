@@ -19,7 +19,9 @@ public class GameController : MonoBehaviour {
     private int player2Points = 0;
     private int currentRoll = 0;
     private int[] player1Tokens; // current position on the board for each player token
+	private Pathway player1Path;
     private int[] player2Tokens; // current position on the board for each player token
+	private Pathway player2Path;
     private List<GameObject> p1TokenObjects;
     private List<GameObject> p2TokenObjects;
 
