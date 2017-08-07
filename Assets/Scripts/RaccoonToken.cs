@@ -12,7 +12,6 @@ public class RaccoonToken : MonoBehaviour {
 	public Pathway pathway;
     private NavMeshAgent nav;
     private GameController gameController;
-    private Transform[] pathway;
     private bool isJumping;
 
     // Use this for initialization
@@ -38,10 +37,10 @@ public class RaccoonToken : MonoBehaviour {
         this.gameController = gameControllerObject.GetComponent<GameController>();
         this.isJumping = false;
         if (this.playerNumber == 1) {
-            pathway = gameController.player1PathStops;
+			pathway.Set(gameController.player1PathStops);
         } else
         {
-            pathway = gameController.player2PathStops;
+			pathway.Set(gameController.player2PathStops);
         }
     }
 
@@ -57,7 +56,7 @@ public class RaccoonToken : MonoBehaviour {
     }
 
     GameObject GetCurrentGameSquare() {
-        GameObject closestSquare = GetClosestGameObject(pathway);
+		GameObject closestSquare = GetClosestGameObject(pathway.Get());
         return closestSquare;
     }
 
