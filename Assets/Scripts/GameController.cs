@@ -11,7 +11,7 @@ public class GameController : MonoBehaviour {
     public Transform[] player1PathStops; // the positions in game space of the game board stops
     public Transform[] player2PathStops; // the positions in game space of the game board stops
     public GameObject tokenPrefab;
-	public int m_StartWait = 3; 
+	public int m_StartWait = 3;
     public Transform[] jumpSpots; // The positions on the map where a jump is required
 
     private bool gameOver = false;
@@ -35,7 +35,6 @@ public class GameController : MonoBehaviour {
 
 	private void PlayerTurn( int player ) {
 		if( whichPlayersTurn == 1 ) {
-			this.currentRoll = 14;
 			this.player1Tokens[0] = this.currentRoll;
 			InstantiateToken(player1PathStops[0], p1TokenObjects);
             this.p1TokenObjects[0].GetComponent<RaccoonToken>().SetPlayerNumber(1);
