@@ -13,7 +13,9 @@ public class RaccoonToken : MonoBehaviour {
 	private int stepIndex;
 	private float stepDist;
 	public Pathway pathway;
-    private NavMeshAgent nav;
+	public float stoppingDistance;
+
+	private NavMeshAgent nav;
     private GameController gameController;
     private bool isJumping;
 
@@ -54,9 +56,7 @@ public class RaccoonToken : MonoBehaviour {
     public void MoveTo(Transform destination) {
         this.target = destination;
 		SetNextDestination();
-		Vector3 position = new Vector3(this.step.position.x, this.step.position.y + 1, this.step.position.z);
-        this.nav.SetDestination(position);
-        this.anim.SetBool("Walking", true);
+		this.anim.SetBool("Walking", true);
     }
 
     GameObject GetCurrentGameSquare() {
@@ -95,7 +95,8 @@ public class RaccoonToken : MonoBehaviour {
 	void UpdateDistanceFromStep()
 	{
 		if (!this.step) SetNextDestination();
-		this.stepDist = Vector3.Distance(this.step.position, transform.position);
+		Vector3 currentPos = new Vector3(this.step.position.x, transform.position.y, this.step.position.z);
+		this.stepDist = Vector3.Distance(currentPos, transform.position);
 	}
 
 	void SetNextDestination()
@@ -109,10 +110,19 @@ public class RaccoonToken : MonoBehaviour {
 				this.step = steps[this.stepIndex];
 				Debug.Log(this.pathway.Get());
 			}
-			if (this.stepDist < 1.5f)
+			if (this.stepDist <= this.stoppingDistance)
 			{
+				Debug.Log(stepDist);
+				if (this.step == this.target) stopWalking();
 				this.stepIndex++;
-				this.step = this.pathway.Get()[this.stepIndex++];
+				if (this.stepIndex < this.pathway.Count())
+				{
+					Transform next = this.pathway.Get()[this.stepIndex];
+					this.step = next;
+					Vector3 position = new Vector3(this.step.position.x, this.step.position.y + 1, this.step.position.z);
+					this.nav.SetDestination(position);
+				}
+				//Debug.Log("Step: " + this.step + " Target: " + this.target);
 			}
 		}
 		else
@@ -127,13 +137,22 @@ public class RaccoonToken : MonoBehaviour {
     {
         //Debug.Log("destination: " + this.nav.destination + ", pathStatus: " + this.nav.pathStatus);
         float dist = Vector3.Distance(this.target.position, transform.position);
-        if (this.anim.GetBool("Walking") == true)
+		bool walking = this.anim.GetBool("Walking");
+
+		if (walking)
         {
-			if (dist < 1.5f)
+			//Debug.Log(dist);
+			if (dist < this.stoppingDistance)
             {
-                this.nav.enabled = false;
-                this.anim.SetBool("Walking", false);
-            }
+				stopWalking();
+			}
         }
     }
+
+	void stopWalking()
+	{
+		Debug.Log("Stop walking");
+		this.nav.enabled = false;
+		this.anim.SetBool("Walking", false);
+	}
 }

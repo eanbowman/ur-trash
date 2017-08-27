@@ -36,6 +36,7 @@ public class GameController : MonoBehaviour {
 	private void PlayerTurn( int player ) {
 		if( whichPlayersTurn == 1 ) {
 			this.player1Tokens[0] = this.currentRoll;
+			this.currentRoll = 15;
 			InstantiateToken(player1PathStops[0], p1TokenObjects);
             this.p1TokenObjects[0].GetComponent<RaccoonToken>().SetPlayerNumber(1);
 			camera.GetComponent<CameraFollow> ().SetFollowTarget (p1TokenObjects [0]);

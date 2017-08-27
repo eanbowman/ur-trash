@@ -19,4 +19,8 @@ public class Pathway : MonoBehaviour {
 		}
 		return currentPath;
 	}
+	public int Count()
+	{
+		return stops.Count;
+	}
 }
