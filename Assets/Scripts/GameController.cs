@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameController : MonoBehaviour {
     public int numTokens;
     public DiceRoller dice;
+	public bool gameStarted = false;
     public int whichPlayersTurn = 1; // counting starts at 1 to be less confusing here
 	public bool playerHasRolled = false;
     public int goalPosition = 15; // number of spaces to go before a token counts as a point
@@ -41,6 +42,7 @@ public class GameController : MonoBehaviour {
 		if (this.whichPlayersTurn == 1) {
 			if (playerHasRolled)
 			{
+				this.gameStarted = true;
 				this.player1Tokens[0] = this.currentRoll;
 				InstantiateToken(player1PathStops[0], p1TokenObjects);
 				this.p1TokenObjects[0].GetComponent<RaccoonToken>().SetPlayerNumber(1);
@@ -50,29 +52,31 @@ public class GameController : MonoBehaviour {
 					p1TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player1PathStops[this.currentRoll]);
 				}
 				Debug.Log("Player 1 rolled " + this.currentRoll);
-				if (p1TokenObjects[0].GetComponent<RaccoonToken>().IsAtDestination())
-				{
-					this.whichPlayersTurn = 2;
-					playerHasRolled = false;
-				}
 			}
+			if (gameStarted && p1TokenObjects[0].GetComponent<RaccoonToken>().IsAtDestination())
+			{
+				this.whichPlayersTurn = 2;
+			}
+			playerHasRolled = false;
 		} else {
 			if (playerHasRolled)
 			{
+				this.gameStarted = true;
 				this.player2Tokens[0] = this.currentRoll;
 				InstantiateToken(player2PathStops[0], p2TokenObjects);
 				this.p2TokenObjects[0].GetComponent<RaccoonToken>().SetPlayerNumber(2);
+				camera.GetComponent<CameraFollow>().SetFollowTarget(p2TokenObjects[0]);
 				if (this.currentRoll > 0)
 				{
 					p2TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player2PathStops[this.currentRoll]);
 				}
 				Debug.Log("Player 2 rolled " + this.currentRoll);
-				if (p2TokenObjects[0].GetComponent<RaccoonToken>().IsAtDestination())
-				{
-					this.whichPlayersTurn = 1;
-					playerHasRolled = false;
-				}
 			}
+			if (gameStarted && p2TokenObjects[0].GetComponent<RaccoonToken>().IsAtDestination())
+			{
+				this.whichPlayersTurn = 1;
+			}
+			playerHasRolled = false;
 		}
 	}
 

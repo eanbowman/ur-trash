@@ -56,7 +56,14 @@ public class RaccoonToken : MonoBehaviour {
         this.isJumping = false;
 		this.playerNumber = 1;
 		this.pathway = this.gameObject.GetComponent<Pathway>();
-		this.pathway.Set(gameController.GetComponent<GameController>().player1PathStops);
+		Debug.Log(this.playerNumber);
+		if (this.playerNumber == 1)
+		{
+			this.pathway.Set(gameController.GetComponent<GameController>().player1PathStops);
+		} else
+		{
+			this.pathway.Set(gameController.GetComponent<GameController>().player2PathStops);
+		}
     }
 
     public void SetPlayerNumber(int number ) {
