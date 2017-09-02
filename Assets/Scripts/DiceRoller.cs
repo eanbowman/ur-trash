@@ -7,6 +7,7 @@ public class DiceRoller : MonoBehaviour {
     public int roll = 0;
     public float minRoll = 0.0f;
     public float maxRoll = 4.0f;
+	public GameController gameController;
     Text diceRoll;
 
     private void Start()
@@ -17,6 +18,7 @@ public class DiceRoller : MonoBehaviour {
     public int Roll() {
         this.roll = (int)Random.Range(minRoll, maxRoll + 1);
         if(diceRoll != null) UpdateText();
+		gameController.playerHasRolled = true;
         return this.roll;
     }
 

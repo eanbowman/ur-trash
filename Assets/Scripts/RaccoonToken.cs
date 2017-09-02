@@ -19,6 +19,16 @@ public class RaccoonToken : MonoBehaviour {
     private GameController gameController;
     private bool isJumping;
 
+	public bool IsAtDestination()
+	{
+		Debug.Log(this.step + " : " + this.target);
+		if(this.step == this.target )
+		{
+			return true;
+		}
+		return false;
+	}
+
     // Use this for initialization
     void Awake () {
         SetReferences();
@@ -113,7 +123,7 @@ public class RaccoonToken : MonoBehaviour {
 			if (this.stepDist <= this.stoppingDistance)
 			{
 				Debug.Log(stepDist);
-				if (this.step == this.target) stopWalking();
+				if (this.step == this.target) StopWalking();
 				this.stepIndex++;
 				if (this.stepIndex < this.pathway.Count())
 				{
@@ -144,12 +154,12 @@ public class RaccoonToken : MonoBehaviour {
 			//Debug.Log(dist);
 			if (dist < this.stoppingDistance)
             {
-				stopWalking();
+				StopWalking();
 			}
         }
     }
 
-	void stopWalking()
+	void StopWalking()
 	{
 		Debug.Log("Stop walking");
 		this.nav.enabled = false;
