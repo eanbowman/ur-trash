@@ -55,6 +55,7 @@ public class GameController : MonoBehaviour {
 				Debug.Log("Player 1 rolled " + this.currentRoll);
 
 				playerHasRolled = false;
+				if(this.player1SelectedToken < numTokens) this.player1SelectedToken++;
 			}
 			if (gameStarted && p1TokenObjects.Count > 0 && p1TokenObjects[player1SelectedToken].GetComponent<RaccoonToken>().IsAtDestination())
 			{
@@ -74,6 +75,7 @@ public class GameController : MonoBehaviour {
 				Debug.Log("Player 2 rolled " + this.currentRoll);
 
 				playerHasRolled = false;
+				if (this.player2SelectedToken < numTokens) this.player2SelectedToken++;
 			}
 			if (gameStarted && p2TokenObjects.Count > 0 && p2TokenObjects[player2SelectedToken].GetComponent<RaccoonToken>().IsAtDestination())
 			{
@@ -130,10 +132,5 @@ public class GameController : MonoBehaviour {
             if (playerTokens[i] != 0) count++;
         }
         return count;
-    }
-
-    void DumpGameStateToConsole()
-    {
-        Debug.Log("P1: " + player1Points + " P2: " + player2Points + " ROLL: " + currentRoll + " GO: " + gameOver + " #Tokens: " + numTokens);
     }
 }
