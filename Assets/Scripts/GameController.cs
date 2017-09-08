@@ -21,8 +21,10 @@ public class GameController : MonoBehaviour {
     private int player2Points = 0;
     private int currentRoll = 0;
     private int[] player1Tokens; // current position on the board for each player token
+	private int player1SelectedToken = 0;
 	private Pathway player1Path;
     private int[] player2Tokens; // current position on the board for each player token
+	private int player2SelectedToken = 0;
 	private Pathway player2Path;
     private List<GameObject> p1TokenObjects;
     private List<GameObject> p2TokenObjects;
@@ -38,46 +40,47 @@ public class GameController : MonoBehaviour {
 		PlayerTurn();
 	}
 
-	private void PlayerTurn() {
+	private bool PlayerTurn() {
 		if (this.whichPlayersTurn == 1) {
 			if (playerHasRolled)
 			{
 				this.gameStarted = true;
-				this.player1Tokens[0] = this.currentRoll;
-				InstantiateToken(player1PathStops[0], p1TokenObjects);
-				this.p1TokenObjects[0].GetComponent<RaccoonToken>().SetPlayerNumber(1);
-				camera.GetComponent<CameraFollow>().SetFollowTarget(p1TokenObjects[0]);
+				this.player1Tokens[player1SelectedToken] = this.currentRoll;
+				if (!InstantiateToken(player1PathStops[player1SelectedToken], p1TokenObjects, 1)) return false;
+				camera.GetComponent<CameraFollow>().SetFollowTarget(p1TokenObjects[player1SelectedToken]);
 				if (this.currentRoll > 0)
 				{
-					p1TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player1PathStops[this.currentRoll]);
+					p1TokenObjects[player1SelectedToken].GetComponent<RaccoonToken>().MoveTo(player1PathStops[this.currentRoll]);
 				}
 				Debug.Log("Player 1 rolled " + this.currentRoll);
+
+				playerHasRolled = false;
 			}
-			if (gameStarted && p1TokenObjects[0].GetComponent<RaccoonToken>().IsAtDestination())
+			if (gameStarted && p1TokenObjects.Count > 0 && p1TokenObjects[player1SelectedToken].GetComponent<RaccoonToken>().IsAtDestination())
 			{
 				this.whichPlayersTurn = 2;
 			}
-			playerHasRolled = false;
 		} else {
 			if (playerHasRolled)
 			{
 				this.gameStarted = true;
-				this.player2Tokens[0] = this.currentRoll;
-				InstantiateToken(player2PathStops[0], p2TokenObjects);
-				this.p2TokenObjects[0].GetComponent<RaccoonToken>().SetPlayerNumber(2);
-				camera.GetComponent<CameraFollow>().SetFollowTarget(p2TokenObjects[0]);
+				this.player2Tokens[player2SelectedToken] = this.currentRoll;
+				if (!InstantiateToken(player2PathStops[player2SelectedToken], p2TokenObjects, 2)) return false;
+				camera.GetComponent<CameraFollow>().SetFollowTarget(p2TokenObjects[player2SelectedToken]);
 				if (this.currentRoll > 0)
 				{
-					p2TokenObjects[0].GetComponent<RaccoonToken>().MoveTo(player2PathStops[this.currentRoll]);
+					p2TokenObjects[player2SelectedToken].GetComponent<RaccoonToken>().MoveTo(player2PathStops[this.currentRoll]);
 				}
 				Debug.Log("Player 2 rolled " + this.currentRoll);
+
+				playerHasRolled = false;
 			}
-			if (gameStarted && p2TokenObjects[0].GetComponent<RaccoonToken>().IsAtDestination())
+			if (gameStarted && p2TokenObjects.Count > 0 && p2TokenObjects[player2SelectedToken].GetComponent<RaccoonToken>().IsAtDestination())
 			{
 				this.whichPlayersTurn = 1;
 			}
-			playerHasRolled = false;
 		}
+		return true;
 	}
 
 	public void RollDice () {
@@ -85,11 +88,19 @@ public class GameController : MonoBehaviour {
 		Debug.Log(this.currentRoll);
 	}
 
-    void InstantiateToken(Transform target, List<GameObject> objects)
-    {
-        GameObject clone = Instantiate(tokenPrefab, target.position, target.rotation) as GameObject;
-        Debug.Log(clone);
-        objects.Add(clone);
+	bool InstantiateToken(Transform target, List<GameObject> objects, int playerNumber)
+	{
+		GameObject clone = Instantiate(tokenPrefab, target.position, target.rotation) as GameObject;
+		clone.GetComponent<RaccoonToken>().SetPlayerNumber(playerNumber);
+		Debug.Log(clone);
+		objects.Add(clone);
+		if (objects.Count > 0)
+		{
+			return true;
+		} else
+		{
+			return false;
+		}
     }
 
     void InitializeGame()

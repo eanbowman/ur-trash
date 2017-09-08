@@ -6,7 +6,8 @@ public class Pathway : MonoBehaviour {
 	public List<Transform> stops;
 
 	public void Set(Transform[] newPath) {
-		foreach( Transform step in newPath ) {
+		stops.Clear();
+		foreach ( Transform step in newPath ) {
 			stops.Add(step);
 		}
 		Debug.Log(stops);
