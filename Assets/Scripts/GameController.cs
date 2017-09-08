@@ -77,10 +77,6 @@ public class GameController : MonoBehaviour {
 				playerHasRolled = false;
 				if (this.player2SelectedToken < numTokens) this.player2SelectedToken++;
 			}
-			if (gameStarted && p2TokenObjects.Count > 0 && p2TokenObjects[player2SelectedToken].GetComponent<RaccoonToken>().IsAtDestination())
-			{
-				this.whichPlayersTurn = 1;
-			}
 		}
 		return true;
 	}
@@ -88,6 +84,13 @@ public class GameController : MonoBehaviour {
 	public void RollDice () {
 		this.currentRoll = dice.Roll();
 		Debug.Log(this.currentRoll);
+		if( this.whichPlayersTurn == 2 )
+		{
+			this.whichPlayersTurn = 1;
+		} else
+		{
+			this.whichPlayersTurn = 2;
+		}
 	}
 
 	bool InstantiateToken(Transform target, List<GameObject> objects, int playerNumber)
