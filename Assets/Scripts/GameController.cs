@@ -28,6 +28,7 @@ public class GameController : MonoBehaviour {
 	private Pathway player2Path;
     private List<GameObject> p1TokenObjects;
     private List<GameObject> p2TokenObjects;
+	private string state = "waiting to roll";
 
 	private GameObject camera;
 
@@ -82,6 +83,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void RollDice () {
+		this.state = "rolled dice";
 		this.currentRoll = dice.Roll();
 		Debug.Log(this.currentRoll);
 		if( this.whichPlayersTurn == 2 )
