@@ -46,37 +46,60 @@ public class GameController : MonoBehaviour {
 			if (playerHasRolled)
 			{
 				this.gameStarted = true;
-				this.player1Tokens[player1SelectedToken] = this.currentRoll;
+				int targetPosition = this.player1Tokens[player1SelectedToken] += this.currentRoll;
 				if (!InstantiateToken(player1PathStops[player1SelectedToken], p1TokenObjects, 1)) return false;
 				camera.GetComponent<CameraFollow>().SetFollowTarget(p1TokenObjects[player1SelectedToken]);
 				if (this.currentRoll > 0)
 				{
-					p1TokenObjects[player1SelectedToken].GetComponent<RaccoonToken>().MoveTo(player1PathStops[this.currentRoll]);
+					p1TokenObjects[player1SelectedToken].GetComponent<RaccoonToken>().MoveTo(player1PathStops[targetPosition]);
 				}
 				Debug.Log("Player 1 rolled " + this.currentRoll);
 
 				playerHasRolled = false;
-				if(this.player1SelectedToken < numTokens) this.player1SelectedToken++;
+				if (this.player1SelectedToken < numTokens)
+				{
+					this.player1SelectedToken++;
+				} else
+				{
+					this.player1SelectedToken = 0;
+				}
 			}
-			if (gameStarted && p1TokenObjects.Count > 0 && p1TokenObjects[player1SelectedToken].GetComponent<RaccoonToken>().IsAtDestination())
+			if (gameStarted && p1TokenObjects.Count > 0 && 
+				p1TokenObjects.Count > player1SelectedToken && 
+				p1TokenObjects[player1SelectedToken].GetComponent<RaccoonToken>().IsAtDestination())
 			{
 				this.whichPlayersTurn = 2;
 			}
-		} else {
+		} else if(this.whichPlayersTurn == 2) {
 			if (playerHasRolled)
 			{
 				this.gameStarted = true;
-				this.player2Tokens[player2SelectedToken] = this.currentRoll;
+				int targetPosition = this.player2Tokens[player2SelectedToken] += this.currentRoll;
 				if (!InstantiateToken(player2PathStops[player2SelectedToken], p2TokenObjects, 2)) return false;
 				camera.GetComponent<CameraFollow>().SetFollowTarget(p2TokenObjects[player2SelectedToken]);
 				if (this.currentRoll > 0)
 				{
-					p2TokenObjects[player2SelectedToken].GetComponent<RaccoonToken>().MoveTo(player2PathStops[this.currentRoll]);
+					p2TokenObjects[player2SelectedToken].GetComponent<RaccoonToken>().MoveTo(player2PathStops[targetPosition]);
 				}
 				Debug.Log("Player 2 rolled " + this.currentRoll);
 
 				playerHasRolled = false;
-				if (this.player2SelectedToken < numTokens) this.player2SelectedToken++;
+				if (this.player2SelectedToken < numTokens) {
+					this.player2SelectedToken++;
+				}
+				else
+				{
+					this.player2SelectedToken = 0;
+				}
+				if (gameStarted && p2TokenObjects.Count > 0 &&
+				p2TokenObjects.Count > player2SelectedToken &&
+				p2TokenObjects[player2SelectedToken].GetComponent<RaccoonToken>().IsAtDestination())
+				{
+					this.whichPlayersTurn = 1;
+				}
+			} else {
+				// Debug.Log("You broke the game, Lilithe.");
+				this.whichPlayersTurn = 1;
 			}
 		}
 		return true;
@@ -86,7 +109,7 @@ public class GameController : MonoBehaviour {
 		this.state = "rolled dice";
 		this.currentRoll = dice.Roll();
 		Debug.Log(this.currentRoll);
-		if( this.whichPlayersTurn == 2 )
+		if( this.whichPlayersTurn != 1 )
 		{
 			this.whichPlayersTurn = 1;
 		} else
@@ -112,9 +135,12 @@ public class GameController : MonoBehaviour {
 
     void InitializeGame()
     {
+		this.whichPlayersTurn = 1;
+		this.gameStarted = false;
+
         // Create Player Token Arrays
-        this.player1Tokens = new int[this.numTokens];
-        this.player2Tokens = new int[this.numTokens];
+        this.player1Tokens = new int[this.numTokens+1];
+        this.player2Tokens = new int[this.numTokens+1];
 
         // Zero out the positions for all of each player's tokens
         for (int i = 0; i < this.numTokens; i++)

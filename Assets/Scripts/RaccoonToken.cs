@@ -54,7 +54,7 @@ public class RaccoonToken : MonoBehaviour {
         gameControllerObject = GameObject.FindGameObjectsWithTag("GameController")[0];
         this.gameController = gameControllerObject.GetComponent<GameController>();
         this.isJumping = false;
-		this.playerNumber = 1;
+		this.playerNumber = 0;
 		this.pathway = this.gameObject.GetComponent<Pathway>();
 		SetPathway();
     }
@@ -81,9 +81,16 @@ public class RaccoonToken : MonoBehaviour {
         this.target = destination;
 		SetNextDestination();
 		this.anim.SetBool("Walking", true);
-    }
+	}
 
-    GameObject GetCurrentGameSquare() {
+	public void MoveBy(Transform destination)
+	{
+		this.target = destination;
+		SetNextDestination();
+		this.anim.SetBool("Walking", true);
+	}
+
+	GameObject GetCurrentGameSquare() {
 		GameObject closestSquare = GetClosestGameObject(pathway.Get());
         return closestSquare;
     }
@@ -94,7 +101,7 @@ public class RaccoonToken : MonoBehaviour {
         for (int i = 0 ; i < jumpSpots.Length; i++) {
             if(closestSquare.name == jumpSpots[i].name) {
                 isJumping = true;
-				Debug.Log("Jumping! " + closestSquare.name + " == " + jumpSpots[i].name);
+				// Debug.Log("Jumping! " + closestSquare.name + " == " + jumpSpots[i].name);
             }
         }
     }
@@ -144,7 +151,7 @@ public class RaccoonToken : MonoBehaviour {
 					Transform next = this.pathway.Get()[this.stepIndex];
 					this.step = next;
 					Vector3 position = new Vector3(this.step.position.x, this.step.position.y + 1, this.step.position.z);
-					this.nav.SetDestination(position);
+					if( this.nav.isActiveAndEnabled ) this.nav.SetDestination(position);
 				}
 				//Debug.Log("Step: " + this.step + " Target: " + this.target);
 			}
