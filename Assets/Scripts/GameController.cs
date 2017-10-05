@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
     public int numTokens;
@@ -17,7 +18,8 @@ public class GameController : MonoBehaviour {
 	public int m_StartWait = 3;
     public Transform[] jumpSpots; // The positions on the map where a jump is required
 
-    private bool gameOver = false;
+	private Text gameStatusText; // A reference to the game's UI
+	private bool gameOver = false;
     private int player1Points = 0;
     private int player2Points = 0;
     private int currentRoll = 0;
@@ -47,25 +49,37 @@ public class GameController : MonoBehaviour {
 		if(this.oldPlayersTurn != this.whichPlayersTurn) Debug.Log("Player " + whichPlayersTurn + "'s turn");
 		this.oldPlayersTurn = this.whichPlayersTurn;
 
+		this.gameStatusText.text = "Player " + this.whichPlayersTurn + "'s turn!";
+
 		if (!this.tokenInPlay || this.tokenInPlay.GetComponent<RaccoonToken>().IsAtDestination())
 		{
 			if (this.whichPlayersTurn == 1)
 			{
 				if (playerHasRolled)
 				{
+					playerHasRolled = false;
 					this.gameStarted = true;
-					int targetPosition = this.player1Tokens[player1SelectedToken] += this.currentRoll;
+
+					// If it doesn't exist, create a token for this piece
 					if (!InstantiateToken(player1PathStops[player1SelectedToken], p1TokenObjects, 1, player1SelectedToken)) return false;
+
+					// Set the target position for this token
+					int targetPosition = this.player1Tokens[player1SelectedToken] += this.currentRoll;
+
+					// The token currently in play is this one
 					this.tokenInPlay = p1TokenObjects[this.player1SelectedToken];
 
+					// Follow the token with the camera
 					camera.GetComponent<CameraFollow>().SetFollowTarget(this.tokenInPlay);
+
+					// Move the token toward its next target
 					if (this.currentRoll > 0)
 					{
 						p1TokenObjects[player1SelectedToken].GetComponent<RaccoonToken>().MoveTo(player1PathStops[targetPosition]);
 					}
-					Debug.Log("Player 1 rolled " + this.currentRoll);
+					this.gameStatusText.text += " and they rolled " + this.currentRoll;
 
-					playerHasRolled = false;
+					// TODO: Fix this - if we haven't exhausted the tokens, create a new one. Otherwise recycle!
 					if (this.player1SelectedToken < numTokens)
 					{
 						this.player1SelectedToken++;
@@ -75,30 +89,37 @@ public class GameController : MonoBehaviour {
 						this.player1SelectedToken = 0;
 					}
 				}
-				else if (p1TokenObjects.Count > player1SelectedToken &&
-				  p1TokenObjects[player1SelectedToken].GetComponent<RaccoonToken>().IsAtDestination())
+				if (this.tokenInPlay && this.tokenInPlay.GetComponent<RaccoonToken>().IsAtDestination())
 				{
 					this.whichPlayersTurn = 2;
 					this.tokenInPlay = null;
 				}
-			}
-			else if (this.whichPlayersTurn == 2)
-			{
+			} else if (this.whichPlayersTurn == 2) {
 				if (playerHasRolled)
 				{
+					playerHasRolled = false;
 					this.gameStarted = true;
-					int targetPosition = this.player2Tokens[player2SelectedToken] += this.currentRoll;
-					if (!InstantiateToken(player2PathStops[player2SelectedToken], p2TokenObjects, 2, player2SelectedToken)) return false;
-					this.tokenInPlay = p2TokenObjects[this.player2SelectedToken];
 
+					// If it doesn't exist, create a token for this piece
+					if (!InstantiateToken(player2PathStops[player2SelectedToken], p1TokenObjects, 1, player2SelectedToken)) return false;
+
+					// Set the target position for this token
+					int targetPosition = this.player2Tokens[player2SelectedToken] += this.currentRoll;
+
+					// The token currently in play is this one
+					this.tokenInPlay = p1TokenObjects[this.player2SelectedToken];
+
+					// Follow the token with the camera
 					camera.GetComponent<CameraFollow>().SetFollowTarget(this.tokenInPlay);
+
+					// Move the token toward its next target
 					if (this.currentRoll > 0)
 					{
-						p2TokenObjects[player2SelectedToken].GetComponent<RaccoonToken>().MoveTo(player2PathStops[targetPosition]);
+						p1TokenObjects[player2SelectedToken].GetComponent<RaccoonToken>().MoveTo(player2PathStops[targetPosition]);
 					}
-					Debug.Log("Player 2 rolled " + this.currentRoll);
+					this.gameStatusText.text += " and they rolled " + this.currentRoll;
 
-					playerHasRolled = false;
+					// TODO: Fix this - if we haven't exhausted the tokens, create a new one. Otherwise recycle!
 					if (this.player2SelectedToken < numTokens)
 					{
 						this.player2SelectedToken++;
@@ -107,23 +128,18 @@ public class GameController : MonoBehaviour {
 					{
 						this.player2SelectedToken = 0;
 					}
-					if (gameStarted && p2TokenObjects.Count > 0 &&
-					p2TokenObjects.Count > player2SelectedToken &&
-					p2TokenObjects[player2SelectedToken].GetComponent<RaccoonToken>().IsAtDestination())
-					{
-						this.whichPlayersTurn = 1;
-						this.tokenInPlay = null;
-					}
 				}
-				else
+				if (this.tokenInPlay && this.tokenInPlay.GetComponent<RaccoonToken>().IsAtDestination())
 				{
-					Debug.Log("You broke the game, Lilithe.");
 					this.whichPlayersTurn = 1;
 					this.tokenInPlay = null;
 				}
+			} else {
+				Debug.Log("You broke the game, Lilithe.");
+				this.whichPlayersTurn = 1;
+				this.tokenInPlay = null;
 			}
-		} else
-		{
+		} else {
 			// Do nothing, player token in transit
 		}
 		return true;
@@ -170,7 +186,10 @@ public class GameController : MonoBehaviour {
         p2TokenObjects = new List<GameObject>();
 
 		this.camera = GameObject.FindGameObjectsWithTag("MainCamera")[0];
-    }
+
+		this.gameStatusText = GameObject.Find("GameStatus").GetComponent<Text>();
+		Debug.Log(this.gameStatusText.text);
+	}
 
     int TokensInPlay(int[] playerTokens)
     {
