@@ -50,7 +50,6 @@ public class RaccoonToken : MonoBehaviour {
         this.isJumping = false;
 		this.playerNumber = 0;
 		this.pathway = this.gameObject.GetComponent<Pathway>();
-		SetPathway();
 		this.stepIndex = 0;
     }
 
@@ -144,17 +143,17 @@ public class RaccoonToken : MonoBehaviour {
 
 	void SetNextDestination()
 	{
-		if (this.pathway)
+		if (this.playerNumber != 0)
 		{
-			if (!this.step)
-			{
+			if (!this.step) {
+				Debug.Log("Step is not set yet. Setting up pathway.");
 				Transform[] steps = this.pathway.Get();
 				this.step = steps[this.stepIndex];
 				//Debug.Log(this.pathway.Get());
 			}
 			if (this.stepDist <= this.stoppingDistance)
 			{
-				//Debug.Log(stepDist);
+				//Debug.Log("Not at destination yet. Dist: " + stepDist);
 				if (this.step == this.target) StopWalking();
 				this.stepIndex++;
 				if (this.stepIndex < this.pathway.Count())
@@ -166,14 +165,13 @@ public class RaccoonToken : MonoBehaviour {
 					Debug.Log("RaccoonToken::SetNextDestination() Setting Next Destination to: " + next);
 
 				}
-				//Debug.Log("Step: " + this.step + " Target: " + this.target);
+				Debug.Log("Step: " + this.step + " Target: " + this.target);
 			}
 		}
 		else
 		{
 			//SetReferences();
 			this.isAtDestination = false;
-			SetNextDestination();
 		}
 		//Debug.Log("Target is: " + this.target + " Next Step: " + this.step);
 	}

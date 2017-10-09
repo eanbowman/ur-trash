@@ -101,13 +101,13 @@ public class GameController : MonoBehaviour {
 					this.gameStarted = true;
 
 					// If it doesn't exist, create a token for this piece
-					if (!InstantiateToken(player2PathStops[player2SelectedToken], p1TokenObjects, 1, player2SelectedToken)) return false;
+					if (!InstantiateToken(player2PathStops[player2SelectedToken], p2TokenObjects, 1, player2SelectedToken)) return false;
 
 					// Set the target position for this token
 					int targetPosition = this.player2Tokens[player2SelectedToken] += this.currentRoll;
 
 					// The token currently in play is this one
-					this.tokenInPlay = p1TokenObjects[this.player2SelectedToken];
+					this.tokenInPlay = p2TokenObjects[this.player2SelectedToken];
 
 					// Follow the token with the camera
 					camera.GetComponent<CameraFollow>().SetFollowTarget(this.tokenInPlay);
@@ -115,7 +115,7 @@ public class GameController : MonoBehaviour {
 					// Move the token toward its next target
 					if (this.currentRoll > 0)
 					{
-						p1TokenObjects[player2SelectedToken].GetComponent<RaccoonToken>().MoveTo(player2PathStops[targetPosition]);
+						p2TokenObjects[player2SelectedToken].GetComponent<RaccoonToken>().MoveTo(player2PathStops[targetPosition]);
 					}
 					this.gameStatusText.text += " and they rolled " + this.currentRoll;
 
@@ -156,8 +156,9 @@ public class GameController : MonoBehaviour {
 		clone.GetComponent<RaccoonToken>().SetPlayerNumber(playerNumber);
 		clone.GetComponent<RaccoonToken>().SetTokenNumber(tokenNumber);
 		//Debug.Log(clone);
+		int count = objects.Count;
 		objects.Add(clone);
-		if (objects.Count > 0)
+		if (objects.Count > count)
 		{
 			return true;
 		} else
