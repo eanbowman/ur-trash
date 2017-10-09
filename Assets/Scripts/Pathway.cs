@@ -10,7 +10,7 @@ public class Pathway : MonoBehaviour {
 		foreach ( Transform step in newPath ) {
 			stops.Add(step);
 		}
-		Debug.Log(stops);
+		Debug.Log("Pathway::Set()");
 	}
 	public Transform[] Get() {
 		Transform[] currentPath = new Transform[stops.Count];
