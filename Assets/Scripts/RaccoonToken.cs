@@ -170,7 +170,7 @@ public class RaccoonToken : MonoBehaviour {
 		}
 		else
 		{
-			this.isAtDestination = false;
+			Debug.Log("RaccoonToken says \"I have no idea what I'm doing\"");
 		}
 		//Debug.Log("Target is: " + this.target + " Next Step: " + this.step);
 	}
