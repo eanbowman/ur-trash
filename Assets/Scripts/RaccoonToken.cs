@@ -7,16 +7,16 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 public class RaccoonToken : MonoBehaviour {
     public int playerNumber;
-	private int tokenNumber;
-    private Animator anim;
-    private Transform target;
-	private Transform step;
-	private int stepIndex;
-	private float stepDist;
+	public int tokenNumber;
+	public Animator anim;
+	public Transform target;
+	public Transform step;
+	public int stepIndex;
+	public float stepDist;
 	public Pathway pathway;
 	public float stoppingDistance;
-	private bool isAtDestination = false;
-	private bool isInPlay = false;
+	public bool isAtDestination = false;
+	public bool isInPlay = false;
 
 	private NavMeshAgent nav;
     private GameController gameController;
@@ -35,9 +35,9 @@ public class RaccoonToken : MonoBehaviour {
 			SetNextDestination();
             CheckDistanceFromDestination();
             CheckIfWeNeedToJump(GetCurrentGameSquare(), this.gameController);
-        }
 
-        this.anim.SetBool ("Jump", this.isJumping);
+			this.anim.SetBool("Jump", this.isJumping);
+		}
     }
 
     void SetReferences() {
@@ -71,12 +71,18 @@ public class RaccoonToken : MonoBehaviour {
 		return isInPlay;
 	}
 
+	public bool IsNotInPlay()
+	{
+		return isInPlay = false;
+	}
+
 	public bool IsAtDestination()
 	{
+		CheckDistanceFromDestination();
 		return isAtDestination;
 	}
 
-	public void SetPlayerNumber(int number ) {
+	public void SetPlayerNumber(int number) {
 		Debug.Log("RaccoonToken::SetPlayerNumber(" + number + ")");
 		this.playerNumber = number;
 		SetPathway();
@@ -96,8 +102,13 @@ public class RaccoonToken : MonoBehaviour {
     public void MoveTo(Transform destination) {
 		Debug.Log("RaccoonToken::MoveTo()");
         this.target = destination;
+		this.stepDist = 0;
+		CheckDistanceFromDestination();
+		UpdateDistanceFromStep();
 		SetNextDestination();
 		this.anim.SetBool("Walking", true);
+		this.nav.isStopped = false;
+		this.isAtDestination = false;
 		this.isInPlay = true;
 	}
 
@@ -149,6 +160,7 @@ public class RaccoonToken : MonoBehaviour {
 				Debug.Log("Step is not set yet. Setting up pathway.");
 				Transform[] steps = this.pathway.Get();
 				this.step = steps[this.stepIndex];
+				this.isAtDestination = false;
 				//Debug.Log(this.pathway.Get());
 			}
 			if (this.stepDist <= this.stoppingDistance)
@@ -194,9 +206,9 @@ public class RaccoonToken : MonoBehaviour {
 	void StopWalking()
 	{
 		Debug.Log("RaccoonToken::StopWalking()");
-		this.nav.enabled = false;
 		this.anim.SetBool("Walking", false);
 		this.isAtDestination = true;
-		this.isInPlay = false;
+		this.nav.isStopped = true;
+		this.isJumping = false;
 	}
 }

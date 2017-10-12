@@ -36,7 +36,7 @@ public class GameController : MonoBehaviour {
 
 	private void Update()
 	{
-		if (playerHasRolled) PlayerTurn(this.whichPlayersTurn);
+		PlayerTurn(this.whichPlayersTurn);
 	}
 
 	private void PlayerTurn(int player) {
@@ -82,22 +82,35 @@ public class GameController : MonoBehaviour {
 		// If the player has rolled,
 		// move that player!
 		RaccoonToken currentRaccoon = currentRaccoonToken.GetComponent<RaccoonToken>();
+		bool otherPlayersTurn = false;
 		if (playerHasRolled) {
 			playerHasRolled = false;
 			int newPositionIndex = currentTokenPositions[currentTokenIndex] + this.currentRoll;
+			// ensure new position index is in array
+			if (newPositionIndex > currentTokenPositions.Length) newPositionIndex = currentTokenPositions.Length;
+			currentTokenPositions[currentTokenIndex] = newPositionIndex;
 			Transform newPosition = currentPathStops[newPositionIndex];
-			currentRaccoon.MoveTo(newPosition);
+			if (this.currentRoll != 0) {
+				currentRaccoon.MoveTo(newPosition);
+			} else {
+				currentRaccoon.IsNotInPlay();
+				otherPlayersTurn = true;
+			}
 		}
 
 		// If the player is at their destination,
 		// their turn is over
-		if (currentRaccoon.IsAtDestination()) {
+		if (otherPlayersTurn || 
+			(currentRaccoon.IsInPlay() && currentRaccoon.IsAtDestination())
+			) {
 			if(player == 1)
 			{
 				this.whichPlayersTurn = 2;
+				currentRaccoon.IsNotInPlay();
 			} else if(player == 2)
 			{
 				this.whichPlayersTurn = 1;
+				currentRaccoon.IsNotInPlay();
 			}
 			else
 			{
