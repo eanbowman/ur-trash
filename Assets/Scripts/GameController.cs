@@ -88,7 +88,7 @@ public class GameController : MonoBehaviour {
 			int newPositionIndex = currentTokenPositions[currentTokenIndex] + this.currentRoll;
 			// ensure new position index is in array
 			Debug.Log("newPositionIndex: " + newPositionIndex + " currentTokenPositions.Length: " + currentPathStops.Length);
-			if (newPositionIndex >= currentPathStops.Length) newPositionIndex = currentPathStops.Length;
+			if (newPositionIndex >= currentPathStops.Length) newPositionIndex = currentTokenPositions[currentTokenIndex];
 			currentTokenPositions[currentTokenIndex] = newPositionIndex;
 			Transform newPosition = currentPathStops[newPositionIndex];
 			if (this.currentRoll != 0) {
