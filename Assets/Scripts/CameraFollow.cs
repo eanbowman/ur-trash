@@ -18,5 +18,6 @@ public class CameraFollow : MonoBehaviour {
 
 	public void SetFollowTarget(GameObject newTarget) {
 		this.followTarget = newTarget.transform;
+		transform.LookAt(newTarget.GetComponent<Transform>());
 	}
 }
