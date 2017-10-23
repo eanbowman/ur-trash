@@ -26,6 +26,8 @@ public class GameController : MonoBehaviour {
 	private int player2SelectedToken = 0;
 	private List<GameObject> p1TokenObjects;
     private List<GameObject> p2TokenObjects;
+	private int player1Poitns = 0;
+	private int player2Points = 0;
 	private GameObject tokenInPlay;
 
 	private GameObject camera;
@@ -40,7 +42,6 @@ public class GameController : MonoBehaviour {
 	}
 
 	private void PlayerTurn(int player) {
-		LogPlayerTurn();
 		List<GameObject> currentTokenObjectList;
 		int currentTokenIndex;
 		GameObject currentRaccoonToken;
@@ -71,6 +72,8 @@ public class GameController : MonoBehaviour {
 		if (currentTokenObjectList.Count <= currentTokenIndex) {
 			if(!InstantiateToken(target, currentTokenObjectList, player, currentTokenIndex)) Debug.Log("Error creating token!");
 		}
+
+		if (currentTokenIndex > currentPathStops.Length) currentTokenIndex = currentPathStops.Length;
 		currentRaccoonToken = currentTokenObjectList[currentTokenIndex];
 
 		// Set current token in play
@@ -84,12 +87,30 @@ public class GameController : MonoBehaviour {
 		RaccoonToken currentRaccoon = currentRaccoonToken.GetComponent<RaccoonToken>();
 		bool otherPlayersTurn = false;
 		if (playerHasRolled) {
+			ClearStatusMessages();
 			playerHasRolled = false;
-			int newPositionIndex = currentTokenPositions[currentTokenIndex] + this.currentRoll;
+			int newPositionIndex = currentTokenPositions[currentTokenIndex];
 			// ensure new position index is in array
 			Debug.Log("newPositionIndex: " + newPositionIndex + " currentTokenPositions.Length: " + currentPathStops.Length);
-			if (newPositionIndex >= currentPathStops.Length) newPositionIndex = currentTokenPositions[currentTokenIndex];
+			if (newPositionIndex > currentPathStops.Length) {
+				this.gameStatusText.text += "Player " + this.whichPlayersTurn + " can not move that piece!";
+			} else if (newPositionIndex == currentPathStops.Length - 1) {
+				this.gameStatusText.text += "Player " + this.whichPlayersTurn + " earned a point!";
+				if (whichPlayersTurn == 1)
+				{
+					player1SelectedToken++;
+					player1Points++;
+				} else
+				{
+					player2SelectedToken++;
+					player2Points++;
+				}
+			} else
+			{
+				newPositionIndex += this.currentRoll;
+			}
 			currentTokenPositions[currentTokenIndex] = newPositionIndex;
+			
 			Transform newPosition = currentPathStops[newPositionIndex];
 			if (this.currentRoll != 0) {
 				currentRaccoon.MoveTo(newPosition);
@@ -108,10 +129,13 @@ public class GameController : MonoBehaviour {
 			{
 				this.whichPlayersTurn = 2;
 				currentRaccoon.IsNotInPlay();
-			} else if(player == 2)
+				LogPlayerTurn();
+			}
+			else if(player == 2)
 			{
 				this.whichPlayersTurn = 1;
 				currentRaccoon.IsNotInPlay();
+				LogPlayerTurn();
 			}
 			else
 			{
@@ -124,12 +148,17 @@ public class GameController : MonoBehaviour {
 		this.currentRoll = dice.Roll();
 	}
 
+	void ClearStatusMessages()
+	{
+		this.gameStatusText.text = "";
+	}
+
 	void LogPlayerTurn()
 	{
 		if (this.oldPlayersTurn != this.whichPlayersTurn) Debug.Log("Player " + whichPlayersTurn + "'s turn");
 		this.oldPlayersTurn = this.whichPlayersTurn;
 
-		this.gameStatusText.text = "Player " + this.whichPlayersTurn + "'s turn!";
+		this.gameStatusText.text += "Player " + this.whichPlayersTurn + "'s turn!";
 	}
 
 	bool InstantiateToken(Transform target, List<GameObject> objects, int playerNumber, int tokenNumber)
