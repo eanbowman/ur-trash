@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +17,9 @@ public class GameController : MonoBehaviour {
     public GameObject tokenPrefab;
 	public int m_StartWait = 3;
     public Transform[] jumpSpots; // The positions on the map where a jump is required
+	public GameObject scoreTextObject;
+
+	private ScoreTextHandler scoreTextHandler;
 
 	private Text gameStatusText; // A reference to the game's UI
     private int currentRoll = 0;
@@ -26,7 +29,7 @@ public class GameController : MonoBehaviour {
 	private int player2SelectedToken = 0;
 	private List<GameObject> p1TokenObjects;
     private List<GameObject> p2TokenObjects;
-	private int player1Poitns = 0;
+	private int player1Points = 0;
 	private int player2Points = 0;
 	private GameObject tokenInPlay;
 
@@ -92,18 +95,18 @@ public class GameController : MonoBehaviour {
 			int newPositionIndex = currentTokenPositions[currentTokenIndex];
 			// ensure new position index is in array
 			Debug.Log("newPositionIndex: " + newPositionIndex + " currentTokenPositions.Length: " + currentPathStops.Length);
-			if (newPositionIndex > currentPathStops.Length) {
+			if (newPositionIndex >= currentPathStops.Length) {
 				this.gameStatusText.text += "Player " + this.whichPlayersTurn + " can not move that piece!";
 			} else if (newPositionIndex == currentPathStops.Length - 1) {
 				this.gameStatusText.text += "Player " + this.whichPlayersTurn + " earned a point!";
 				if (whichPlayersTurn == 1)
 				{
 					player1SelectedToken++;
-					player1Points++;
+					this.player1Points++;
 				} else
 				{
 					player2SelectedToken++;
-					player2Points++;
+					this.player2Points++;
 				}
 			} else
 			{
@@ -118,6 +121,7 @@ public class GameController : MonoBehaviour {
 				currentRaccoon.IsNotInPlay();
 				otherPlayersTurn = true;
 			}
+			UpdateScore();
 		}
 
 		// If the player is at their destination,
@@ -141,6 +145,18 @@ public class GameController : MonoBehaviour {
 			{
 				throw new UnityException("An invalid player number was set.");
 			}
+		}
+	}
+
+	private void UpdateScore()
+	{
+		if (scoreTextObject)
+		{
+			scoreTextHandler = scoreTextObject.GetComponent<ScoreTextHandler>();
+			scoreTextHandler.scoresText = "Player 1: " + (this.player1Points.ToString());
+			scoreTextHandler.scoresText += Environment.NewLine;
+			scoreTextHandler.scoresText += "Player 2: " + (this.player2Points.ToString());
+			scoreTextHandler.scoresText += Environment.NewLine;
 		}
 	}
 
