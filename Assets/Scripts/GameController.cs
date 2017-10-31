@@ -7,6 +7,7 @@ public class GameController : MonoBehaviour {
     public int numTokens;
     public DiceRoller dice;
 	public bool gameStarted = false;
+	public bool gameOver = true;
     public int whichPlayersTurn = 1; // counting starts at 1 to be less confusing here
 	private int oldPlayersTurn = 0;
 	public bool playerHasRolled = false;
@@ -68,30 +69,43 @@ public class GameController : MonoBehaviour {
 		} else {
 			throw new UnityException("An invalid player number was set.");
 		}
-		if (currentTokenIndex >= currentTokenPositions.Length) currentTokenIndex = currentTokenPositions.Length - 1;
-		if (currentTokenPositions[currentTokenIndex] >= currentPathStops.Length) currentTokenPositions[currentTokenIndex] = currentPathStops.Length - 1;
+
+		// If the player has exhausted all of their tokens, they won!
+		if (currentTokenIndex >= currentTokenPositions.Length)
+		{
+			Debug.Log("This player has exhausted all of their tokens! They won!");
+			gameOver = true;
+			return;
+		};
+
+		// If the player rolls a number higher than the number of steps in the path, they lose a turn.
+		if (currentTokenPositions[currentTokenIndex] >= currentPathStops.Length)
+		{
+			throw new UnityException("Somehow we have a current token position past the end of the path!");
+		}
 
 		// Set the Current Token
 		// If it doesn't exist, create one!
 		target = currentPathStops[currentTokenPositions[currentTokenIndex]];
 		if (currentTokenObjectList.Count <= currentTokenIndex) {
-			if(!InstantiateToken(target, currentTokenObjectList, player, currentTokenIndex)) Debug.Log("Error creating token!");
+			if(!InstantiateToken(target, currentTokenObjectList, player, currentTokenIndex)) Debug.LogError("Error creating token!");
 		}
 
-		if (currentTokenIndex > currentPathStops.Length) currentTokenIndex = currentPathStops.Length;
+		if (currentTokenIndex >= currentPathStops.Length) currentTokenIndex = currentPathStops.Length - 1;
 		currentRaccoonToken = currentTokenObjectList[currentTokenIndex];
 
 		// Set current token in play
 		this.tokenInPlay = currentRaccoonToken;
 
-		// Follow the currently selected token with the camera
-		camera.GetComponent<CameraFollow>().SetFollowTarget(this.tokenInPlay);
-
+		
 		// If the player has rolled,
 		// move that player!
 		RaccoonToken currentRaccoon = currentRaccoonToken.GetComponent<RaccoonToken>();
 		bool otherPlayersTurn = false;
 		if (playerHasRolled) {
+			// Follow the currently selected token with the camera
+			camera.GetComponent<CameraFollow>().SetFollowTarget(this.tokenInPlay);
+
 			ClearStatusMessages();
 			playerHasRolled = false;
 			int newPositionIndex = currentTokenPositions[currentTokenIndex];
