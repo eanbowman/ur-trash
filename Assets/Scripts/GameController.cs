@@ -68,6 +68,8 @@ public class GameController : MonoBehaviour {
 		} else {
 			throw new UnityException("An invalid player number was set.");
 		}
+		if (currentTokenIndex >= currentTokenPositions.Length) currentTokenIndex = currentTokenPositions.Length - 1;
+		if (currentTokenPositions[currentTokenIndex] >= currentPathStops.Length) currentTokenPositions[currentTokenIndex] = currentPathStops.Length - 1;
 
 		// Set the Current Token
 		// If it doesn't exist, create one!
@@ -112,6 +114,7 @@ public class GameController : MonoBehaviour {
 			{
 				newPositionIndex += this.currentRoll;
 			}
+			if (newPositionIndex >= currentPathStops.Length) newPositionIndex = currentPathStops.Length - 1;
 			currentTokenPositions[currentTokenIndex] = newPositionIndex;
 			
 			Transform newPosition = currentPathStops[newPositionIndex];
