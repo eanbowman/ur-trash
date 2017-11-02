@@ -7,7 +7,7 @@ public class GameController : MonoBehaviour {
     public int numTokens;
     public DiceRoller dice;
 	public bool gameStarted = false;
-	public bool gameOver = true;
+	public bool gameOver = false;
     public int whichPlayersTurn = 1; // counting starts at 1 to be less confusing here
 	private int oldPlayersTurn = 0;
 	public bool playerHasRolled = false;
@@ -19,6 +19,8 @@ public class GameController : MonoBehaviour {
 	public int m_StartWait = 3;
     public Transform[] jumpSpots; // The positions on the map where a jump is required
 	public GameObject scoreTextObject;
+	public GameObject gameUIPanel;
+	public GameObject gameOverPanel;
 
 	private ScoreTextHandler scoreTextHandler;
 
@@ -42,7 +44,13 @@ public class GameController : MonoBehaviour {
 
 	private void Update()
 	{
-		PlayerTurn(this.whichPlayersTurn);
+		if (!this.gameOver)
+		{
+			PlayerTurn(this.whichPlayersTurn);
+		} else
+		{
+			PlayAgainMenu();
+		}
 	}
 
 	private void PlayerTurn(int player) {
@@ -165,6 +173,13 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
+	private void PlayAgainMenu()
+	{
+		this.gameStatusText.text = "GAME OVER!";
+		this.gameUIPanel.SetActive(false);
+		this.gameOverPanel.SetActive(true);
+	}
+
 	private void UpdateScore()
 	{
 		if (scoreTextObject)
@@ -215,6 +230,7 @@ public class GameController : MonoBehaviour {
     {
 		this.whichPlayersTurn = 1;
 		this.gameStarted = false;
+		this.gameOver = false;
 
         // Create Player Token Arrays
         this.player1Tokens = new int[this.numTokens+1];
