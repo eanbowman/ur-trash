@@ -10,8 +10,11 @@ public class CameraFollow : MonoBehaviour {
 
 	public void MoveTo(Transform target)
 	{
-		transform.position = Vector3.Lerp(transform.position, target.position + offset, Time.deltaTime * 100);
-		transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * 100);
+		if (target)
+		{
+			transform.position = Vector3.Lerp(transform.position, target.position + offset, Time.deltaTime * 100);
+			transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * 100);
+		}
 	}
 
 	void Start () {

@@ -180,6 +180,13 @@ public class GameController : MonoBehaviour {
 		this.gameOverPanel.SetActive(true);
 	}
 
+	private void ResetMenus()
+	{
+		this.gameStatusText.text = "";
+		this.gameUIPanel.SetActive(true);
+		this.gameOverPanel.SetActive(false);
+	}
+
 	private void UpdateScore()
 	{
 		if (scoreTextObject)
@@ -226,8 +233,41 @@ public class GameController : MonoBehaviour {
 		}
     }
 
-    void InitializeGame()
+	public void ResetGame()
+	{
+		Debug.Log("Reset game!");
+
+		// Remove all Player 1 token objects
+		foreach (GameObject token in p1TokenObjects)
+		{
+			GameObject.Destroy(token);
+		}
+		p1TokenObjects = new List<GameObject>();
+		player1SelectedToken = 0;
+
+		// Remove all Player 2 token objects
+		foreach (GameObject token in p2TokenObjects)
+		{
+			GameObject.Destroy(token);
+		}
+		p2TokenObjects = new List<GameObject>();
+		player2SelectedToken = 0;
+
+		this.whichPlayersTurn = 1;
+		this.gameStarted = false;
+		this.gameOver = false;
+
+		// Create Player Token Arrays
+		this.player1Tokens = new int[this.numTokens + 1];
+		this.player2Tokens = new int[this.numTokens + 1];
+
+		ResetMenus();
+		GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced); // Rarely, if ever, force Garbage Collection
+	}
+
+    private void InitializeGame()
     {
+		Debug.Log("Initializing game!");
 		this.whichPlayersTurn = 1;
 		this.gameStarted = false;
 		this.gameOver = false;
