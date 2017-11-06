@@ -156,12 +156,38 @@ public class GameController : MonoBehaviour {
 			) {
 			if(player == 1)
 			{
+				// If we are on another player's space, knock them back to start
+				for (int i = 0; i < player2Tokens.Length; i++)
+				{
+					if (player2Tokens[i] == currentTokenIndex)
+					{
+						Debug.Log("Knockback!");
+						gameStatusText.text = "Knockback!";
+						if (p2TokenObjects.Count > i)
+						{
+							p2TokenObjects[i].GetComponent<RaccoonToken>().MoveTo(player2PathStops[0]);
+						}
+					}
+				}
 				this.whichPlayersTurn = 2;
 				currentRaccoon.IsNotInPlay();
 				LogPlayerTurn();
 			}
 			else if(player == 2)
 			{
+				// If we are on another player's space, knock them back to start
+				for (int i = 0; i < player1Tokens.Length; i++)
+				{
+					if (player1Tokens[i] == currentTokenIndex)
+					{
+						Debug.Log("Knockback!");
+						gameStatusText.text = "Knockback!";
+						if (p1TokenObjects.Count > i)
+						{
+							p1TokenObjects[i].GetComponent<RaccoonToken>().MoveTo(player1PathStops[0]);
+						}
+					}
+				}
 				this.whichPlayersTurn = 1;
 				currentRaccoon.IsNotInPlay();
 				LogPlayerTurn();

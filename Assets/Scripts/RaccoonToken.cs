@@ -88,6 +88,11 @@ public class RaccoonToken : MonoBehaviour {
 		SetPathway();
 	}
 
+	public int GetPlayerNumber()
+	{
+		return this.playerNumber;
+	}
+
 	public int SetTokenNumber(int number)
 	{
 		Debug.Log("RaccoonToken::SetTokenNumber(" + number + ")");
