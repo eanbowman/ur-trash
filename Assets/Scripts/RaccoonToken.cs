@@ -117,6 +117,13 @@ public class RaccoonToken : MonoBehaviour {
 		this.isInPlay = true;
 	}
 
+	public void RollBackTo(Transform destination) {
+		Debug.Log("RaccoonToken::RollBackTo()");
+		this.step = destination;
+		this.anim.SetBool("Walking", false);
+		this.anim.SetBool("Rolling", true);
+	}
+
 	GameObject GetCurrentGameSquare() {
 		GameObject closestSquare = GetClosestGameObject(pathway.Get());
         return closestSquare;

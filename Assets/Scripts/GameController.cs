@@ -149,6 +149,16 @@ public class GameController : MonoBehaviour {
 			UpdateScore();
 		}
 
+		// Are we at a dangerous position?
+		bool dangerous = false;
+		foreach( int spot in dangerousPositions )
+		{
+			if (currentTokenPositions[currentTokenIndex] == spot)
+			{
+				dangerous = true;
+			}
+		}
+
 		// If the player is at their destination,
 		// their turn is over
 		if (otherPlayersTurn || 
@@ -157,15 +167,18 @@ public class GameController : MonoBehaviour {
 			if(player == 1)
 			{
 				// If we are on another player's space, knock them back to start
-				for (int i = 0; i < player2Tokens.Length; i++)
+				if (dangerous) for (int i = 0; i < player2Tokens.Length; i++)
 				{
-					if (player2Tokens[i] == currentTokenIndex)
+					if (player1Tokens[i] != 0)
 					{
-						Debug.Log("Player 1 knocked player 2's token back to the beginning!");
-						gameStatusText.text = "Player 1 knocked player 2's token back to the beginning!" + Environment.NewLine;
-						if (p2TokenObjects.Count > i)
+						if (player2Tokens[i] == currentTokenPositions[currentTokenIndex])
 						{
-							p2TokenObjects[i].GetComponent<RaccoonToken>().MoveTo(player2PathStops[0]);
+							Debug.Log(player2Tokens[i].ToString() + " == " + currentTokenIndex.ToString());
+							gameStatusText.text = "Player 1 knocked player 2's token back to the beginning!" + Environment.NewLine;
+							if (p2TokenObjects.Count > i)
+							{
+								p2TokenObjects[i].GetComponent<RaccoonToken>().RollBackTo(player2PathStops[0]);
+							}
 						}
 					}
 				}
@@ -176,15 +189,18 @@ public class GameController : MonoBehaviour {
 			else if(player == 2)
 			{
 				// If we are on another player's space, knock them back to start
-				for (int i = 0; i < player1Tokens.Length; i++)
+				if (dangerous) for (int i = 0; i < player1Tokens.Length; i++)
 				{
-					if (player1Tokens[i] == currentTokenIndex)
+					if(player1Tokens[i] != 0)
 					{
-						Debug.Log("Player 2 knocked player 1's token back to the beginning!");
-						gameStatusText.text = "Player 2 knocked player 1's token back to the beginning!" + Environment.NewLine;
-						if (p1TokenObjects.Count > i)
+						if (player1Tokens[i] == currentTokenPositions[currentTokenIndex])
 						{
-							p1TokenObjects[i].GetComponent<RaccoonToken>().MoveTo(player1PathStops[0]);
+							Debug.Log(player1Tokens[i].ToString() + " == " + currentTokenPositions[currentTokenIndex].ToString());
+							gameStatusText.text = "Player 2 knocked player 1's token back to the beginning!" + Environment.NewLine;
+							if (p1TokenObjects.Count > i)
+							{
+								p1TokenObjects[i].GetComponent<RaccoonToken>().RollBackTo(player1PathStops[0]);
+							}
 						}
 					}
 				}
@@ -218,9 +234,11 @@ public class GameController : MonoBehaviour {
 		if (scoreTextObject)
 		{
 			scoreTextHandler = scoreTextObject.GetComponent<ScoreTextHandler>();
-			scoreTextHandler.scoresText = "Player 1: " + (this.player1Points.ToString());
+			scoreTextHandler.scoresText = "P1 Pos: " + player1Tokens[player1SelectedToken];
+			scoreTextHandler.scoresText += ", Score: " + (this.player1Points.ToString());
 			scoreTextHandler.scoresText += Environment.NewLine;
-			scoreTextHandler.scoresText += "Player 2: " + (this.player2Points.ToString());
+			scoreTextHandler.scoresText += "P2 Pos: " + player2Tokens[player2SelectedToken];
+			scoreTextHandler.scoresText += ", Score: " + (this.player2Points.ToString());
 			scoreTextHandler.scoresText += Environment.NewLine;
 		}
 	}
