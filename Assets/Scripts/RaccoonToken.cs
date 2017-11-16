@@ -112,6 +112,7 @@ public class RaccoonToken : MonoBehaviour {
 		UpdateDistanceFromStep();
 		SetNextDestination();
 		this.anim.SetBool("Walking", true);
+		this.anim.SetBool("Rolling", false);
 		this.nav.isStopped = false;
 		this.isAtDestination = false;
 		this.isInPlay = true;
@@ -119,9 +120,15 @@ public class RaccoonToken : MonoBehaviour {
 
 	public void RollBackTo(Transform destination) {
 		Debug.Log("RaccoonToken::RollBackTo()");
-		this.step = destination;
+		this.target = destination;
+		CheckDistanceFromDestination();
+		UpdateDistanceFromStep();
+		SetNextDestination();
 		this.anim.SetBool("Walking", false);
 		this.anim.SetBool("Rolling", true);
+		this.nav.isStopped = false;
+		this.isAtDestination = false;
+		this.isInPlay = false;
 	}
 
 	GameObject GetCurrentGameSquare() {
@@ -130,7 +137,8 @@ public class RaccoonToken : MonoBehaviour {
     }
 
     void CheckIfWeNeedToJump(GameObject closestSquare, GameController gameController) {
-        Transform[] jumpSpots = gameController.jumpSpots;
+		if (this.anim.GetBool("Rolling")) return; // don't need to jump if we're rolling backward
+		Transform[] jumpSpots = gameController.jumpSpots;
 		isJumping = false;
         for (int i = 0 ; i < jumpSpots.Length; i++) {
             if(closestSquare.name == jumpSpots[i].name) {
@@ -179,7 +187,11 @@ public class RaccoonToken : MonoBehaviour {
 			{
 				//Debug.Log("Not at destination yet. Dist: " + stepDist);
 				if (this.step == this.target) StopWalking();
-				this.stepIndex++;
+				if (this.isInPlay) {
+					this.stepIndex++; // we are moving forward
+				} else if(this.stepIndex > 0) {
+					this.stepIndex--; // we were knocked back
+				}
 				if (this.stepIndex < this.pathway.Count())
 				{
 					Transform next = this.pathway.Get()[this.stepIndex];

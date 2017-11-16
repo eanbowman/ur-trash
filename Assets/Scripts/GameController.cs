@@ -61,6 +61,8 @@ public class GameController : MonoBehaviour {
 		Transform[] currentPathStops;
 		int[] currentTokenPositions;
 
+		this.currentRoll = 2;
+
 		// Set current variables for player objects based on whose turn it is
 		if (player == 1)
 		{
