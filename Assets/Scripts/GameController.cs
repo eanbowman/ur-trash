@@ -161,8 +161,8 @@ public class GameController : MonoBehaviour {
 				{
 					if (player2Tokens[i] == currentTokenIndex)
 					{
-						Debug.Log("Knockback!");
-						gameStatusText.text = "Knockback!";
+						Debug.Log("Player 1 knocked player 2's token back to the beginning!");
+						gameStatusText.text = "Player 1 knocked player 2's token back to the beginning!" + Environment.NewLine;
 						if (p2TokenObjects.Count > i)
 						{
 							p2TokenObjects[i].GetComponent<RaccoonToken>().MoveTo(player2PathStops[0]);
@@ -180,8 +180,8 @@ public class GameController : MonoBehaviour {
 				{
 					if (player1Tokens[i] == currentTokenIndex)
 					{
-						Debug.Log("Knockback!");
-						gameStatusText.text = "Knockback!";
+						Debug.Log("Player 2 knocked player 1's token back to the beginning!");
+						gameStatusText.text = "Player 2 knocked player 1's token back to the beginning!" + Environment.NewLine;
 						if (p1TokenObjects.Count > i)
 						{
 							p1TokenObjects[i].GetComponent<RaccoonToken>().MoveTo(player1PathStops[0]);
