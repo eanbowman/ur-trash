@@ -58,10 +58,12 @@ public class RaccoonToken : MonoBehaviour {
 		Debug.Log("RaccoonToken::SetPathway()");
 		if (this.playerNumber != 1)
 		{
+			Debug.Log("Setting player 2 path stops");
 			this.pathway.Set(gameController.GetComponent<GameController>().player2PathStops);
 		}
 		else
 		{
+			Debug.Log("Setting player 1 path stops");
 			this.pathway.Set(gameController.GetComponent<GameController>().player1PathStops);
 		}
 	}
@@ -192,7 +194,8 @@ public class RaccoonToken : MonoBehaviour {
 				} else if(this.stepIndex > 0) {
 					this.stepIndex--; // we were knocked back
 				}
-				if (this.stepIndex < this.pathway.Count())
+				if (this.stepIndex > 0 && 
+					this.stepIndex < this.pathway.Count())
 				{
 					Transform next = this.pathway.Get()[this.stepIndex];
 					this.step = next;

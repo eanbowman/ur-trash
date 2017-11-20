@@ -44,6 +44,7 @@ public class GameController : MonoBehaviour {
 
 	private void Update()
 	{
+		if( this.whichPlayersTurn.Equals(null) ) { InitializeGame(); }
 		if (!this.gameOver)
 		{
 			PlayerTurn(this.whichPlayersTurn);
@@ -97,12 +98,25 @@ public class GameController : MonoBehaviour {
 		// Set the Current Token
 		// If it doesn't exist, create one!
 		target = currentPathStops[currentTokenPositions[currentTokenIndex]];
-		if (currentTokenObjectList.Count <= currentTokenIndex) {
-			if(!InstantiateToken(target, currentTokenObjectList, player, currentTokenIndex)) Debug.LogError("Error creating token!");
+		if (playerHasRolled &&
+			currentPathStops.Length > 0 &&
+			currentTokenObjectList.Count <= currentTokenIndex) {
+			target = currentPathStops[0];
+			if (!InstantiateToken(target, currentTokenObjectList, player, currentTokenIndex))
+			{
+				Debug.LogError("Error creating token!");
+				return;
+			}
 		}
 
-		if (currentTokenIndex >= currentPathStops.Length) currentTokenIndex = currentPathStops.Length - 1;
-		currentRaccoonToken = currentTokenObjectList[currentTokenIndex];
+		if (currentTokenIndex > currentTokenObjectList.Count - 1)
+		{
+			return;
+		}
+		else
+		{
+			currentRaccoonToken = currentTokenObjectList[currentTokenIndex];
+		}
 
 		// Set current token in play
 		this.tokenInPlay = currentRaccoonToken;
