@@ -101,15 +101,20 @@ public class GameController : MonoBehaviour {
 		if (playerHasRolled &&
 			currentPathStops.Length > 0 &&
 			currentTokenObjectList.Count <= currentTokenIndex) {
-			target = currentPathStops[0];
-			if (!InstantiateToken(target, currentTokenObjectList, player, currentTokenIndex))
+			Transform newPosition = target;
+			//newPosition = currentPathStops[0].transform;
+			if (!InstantiateToken(newPosition, currentTokenObjectList, player, currentTokenIndex))
 			{
 				Debug.LogError("Error creating token!");
 				return;
+			} else
+			{
+				if(currentTokenObjectList[currentTokenIndex]
 			}
 		}
 
-		if (currentTokenIndex > currentTokenObjectList.Count - 1)
+		if (currentTokenIndex.Equals(null) ||
+			currentTokenIndex > currentTokenObjectList.Count - 1)
 		{
 			return;
 		}
