@@ -109,7 +109,10 @@ public class GameController : MonoBehaviour {
 				return;
 			} else
 			{
-				if(currentTokenObjectList[currentTokenIndex]
+				if(currentTokenObjectList[currentTokenIndex])
+				{
+					Debug.Log("***** A new token was created! *****");
+				}
 			}
 		}
 
@@ -283,7 +286,9 @@ public class GameController : MonoBehaviour {
 
 	bool InstantiateToken(Transform target, List<GameObject> objects, int playerNumber, int tokenNumber)
 	{
-		GameObject clone = Instantiate(tokenPrefab, target.position, target.rotation) as GameObject;
+		GameObject clone = Instantiate(tokenPrefab);//, target.position, target.rotation) as GameObject;
+		clone.transform.position = target.position;
+		//clone.transform.rotation = target.rotation;
 		clone.GetComponent<RaccoonToken>().SetPlayerNumber(playerNumber);
 		clone.GetComponent<RaccoonToken>().SetTokenNumber(tokenNumber);
 		//Debug.Log(clone);
