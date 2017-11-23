@@ -107,7 +107,7 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 3b275d950a503e346a525a844b45522d, type: 2}
 --- !u!4 &60880607 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4057258012655698, guid: 26332e144776e0644be388cfaf84b49a,
@@ -698,6 +698,7 @@ GameObject:
   - component: {fileID: 1640925235}
   - component: {fileID: 1640925234}
   - component: {fileID: 1640925237}
+  - component: {fileID: 1640925238}
   m_Layer: 0
   m_Name: Token
   m_TagString: Untagged
@@ -791,6 +792,20 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1640925238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1640925232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 166abe2c0df40a042b29115d506e9fb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshAgent: {fileID: 0}
+  pathSteps: []
+  playerNumber: 1
 --- !u!4 &1709129305 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4812764375076432, guid: 26332e144776e0644be388cfaf84b49a,
@@ -1048,6 +1063,7 @@ GameObject:
   - component: {fileID: 1791963446}
   - component: {fileID: 1791963445}
   - component: {fileID: 1791963448}
+  - component: {fileID: 1791963449}
   m_Layer: 0
   m_Name: Token P2
   m_TagString: Untagged
@@ -1141,6 +1157,20 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1791963449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1791963443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 166abe2c0df40a042b29115d506e9fb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshAgent: {fileID: 0}
+  pathSteps: []
+  playerNumber: 2
 --- !u!4 &1950010908 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4452532716728148, guid: 26332e144776e0644be388cfaf84b49a,
