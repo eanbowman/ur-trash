@@ -41,8 +41,7 @@ public class TokenHandler : MonoBehaviour {
 	void ActivateClickableObject(Vector3 point)
 	{
 		GameObject target = GetClosestGameObject(this.pathSteps.ToArray(), point);
-		//target.GetComponent<IClickable>().Activate();
-		Debug.Log(target);
+		Debug.Log("User clicked close to " + target.name);
 		navMeshAgent.SetDestination(target.transform.position);
 	}
 
