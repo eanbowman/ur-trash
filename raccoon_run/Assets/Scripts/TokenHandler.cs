@@ -6,6 +6,7 @@ public class TokenHandler : MonoBehaviour {
 	public NavMeshAgent navMeshAgent;
 	public List<Transform> pathSteps;
 	public int playerNumber;
+	public bool isSelected;
 
 	private int destPoint = 0;
 
@@ -27,13 +28,16 @@ public class TokenHandler : MonoBehaviour {
 		// close to the current one.
 		/*if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.5f)
 			CheckCurrentTarget();*/
-		if (Input.GetMouseButtonDown(0))
+		if (this.isSelected)
 		{
-			RaycastHit hit;
-
-			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+			if (Input.GetMouseButtonDown(0))
 			{
-				ActivateClickableObject(hit.point);
+				RaycastHit hit;
+
+				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+				{
+					ActivateClickableObject(hit.point);
+				}
 			}
 		}
 	}
