@@ -7,6 +7,7 @@ public class TokenHandler : MonoBehaviour {
 	public List<Transform> pathSteps;
 	public int playerNumber;
 	public bool isSelected;
+	public GameObject activationIndicator;
 
 	private int destPoint = 0;
 
@@ -30,6 +31,7 @@ public class TokenHandler : MonoBehaviour {
 			CheckCurrentTarget();*/
 		if (this.isSelected)
 		{
+			activationIndicator.SetActive(true);
 			if (Input.GetMouseButtonDown(0))
 			{
 				RaycastHit hit;
@@ -39,6 +41,9 @@ public class TokenHandler : MonoBehaviour {
 					ActivateClickableObject(hit.point);
 				}
 			}
+		} else
+		{
+			activationIndicator.SetActive(false);
 		}
 	}
 

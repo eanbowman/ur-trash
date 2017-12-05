@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerHandler : MonoBehaviour {
 	public bool hasControl = false;
 	public List<Transform> tokens;
+	public float hitBoxSize = 1.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -28,7 +29,13 @@ public class PlayerHandler : MonoBehaviour {
 				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
 				{
 					GameObject target = GetClosestGameObject(this.tokens.ToArray(), hit.point);
-					Debug.Log("User clicked close to " + target.name);
+					if (target)
+					{
+						Debug.Log("User clicked close to " + target.name);
+
+						// Toggle token selected state
+						target.GetComponent<TokenHandler>().isSelected = !target.GetComponent<TokenHandler>().isSelected;
+					}
 				}
 			}
 		}
@@ -43,7 +50,8 @@ public class PlayerHandler : MonoBehaviour {
 		for (int i = 0; i < otherTransforms.Length; i++)
 		{
 			float distanceFromTarget = Vector3.Distance(point, otherTransforms[i].position);
-			if (distanceFromTarget < closestDistance)
+			if (distanceFromTarget < closestDistance &&
+				distanceFromTarget < this.hitBoxSize)
 			{
 				// We have a new closest target.
 				closestTarget = otherTransforms[i].gameObject;
