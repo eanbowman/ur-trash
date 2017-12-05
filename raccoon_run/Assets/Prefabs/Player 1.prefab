@@ -303,7 +303,7 @@ MonoBehaviour:
   pathSteps: []
   playerNumber: 1
   isSelected: 0
-  activationIndicator: {fileID: 0}
+  activationIndicator: {fileID: 1645557180920392}
 --- !u!114 &114816909823451950
 MonoBehaviour:
   m_ObjectHideFlags: 1
