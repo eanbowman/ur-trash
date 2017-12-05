@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4507708854240152}
   - component: {fileID: 114622323567666298}
+  - component: {fileID: 114522763211981372}
   m_Layer: 0
   m_Name: Tokens
   m_TagString: Untagged
@@ -95,7 +96,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4390152262152192
 Transform:
   m_ObjectHideFlags: 1
@@ -259,6 +260,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114522763211981372
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1358574407104138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd6de60f8fd8de54ca4f1f2f74df17eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasControl: 1
+  tokens: []
+  hitBoxSize: 1
 --- !u!114 &114622323567666298
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -272,6 +287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hasControl: 1
   tokens: []
+  hitBoxSize: 1
 --- !u!114 &114807121369037244
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -287,7 +303,7 @@ MonoBehaviour:
   pathSteps: []
   playerNumber: 1
   isSelected: 0
-  activationIndicator: {fileID: 1645557180920392}
+  activationIndicator: {fileID: 0}
 --- !u!114 &114816909823451950
 MonoBehaviour:
   m_ObjectHideFlags: 1
