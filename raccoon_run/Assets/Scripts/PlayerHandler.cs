@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHandler : MonoBehaviour {
+public class PlayerHandler : Interactable {
 	public bool hasControl = false;
 	public List<Transform> tokens;
 	public float hitBoxSize = 1.0f;
 
+	public override void Interact()
+    {
+        Debug.Log("Interacting with Player");
+    }
+
+	/*
 	// Use this for initialization
 	void Start () {
 		foreach (Transform child in transform)
@@ -61,4 +67,5 @@ public class PlayerHandler : MonoBehaviour {
 
 		return closestTarget;
 	}
+	*/
 }
