@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameController : MonoBehaviour {
-	public string gameState = "Rolling";
+	public string gameState = "Rolling"; // the first move is to roll the die
 	public int playerNumber = 1;
 	public int diceValue = 0;
 

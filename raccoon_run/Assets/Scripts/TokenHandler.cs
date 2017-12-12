@@ -12,6 +12,7 @@ public class TokenHandler : MonoBehaviour {
 	private int destPoint = 0; // the current destination of the token
 	private int nextStep = 0; // the next step toward destPoint
 	private string gameState;
+	private GameObject gameController;
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +24,7 @@ public class TokenHandler : MonoBehaviour {
 			this.pathSteps = pathwayHandler.stops;
 			CheckCurrentTarget();
 		}
+		gameController = GameObject.FindGameObjectsWithTag("GameController")[0];
 	}
 	
 	// Update is called once per frame
@@ -54,7 +56,14 @@ public class TokenHandler : MonoBehaviour {
 		int target = GetClosestGameObject(this.pathSteps.ToArray(), point);
 		Debug.Log("User clicked close to " + target);
 		//navMeshAgent.SetDestination(target.transform.position);
-		destPoint = target;
+		int difference = target - destPoint;
+		if (difference <= gameController.GetComponent<GameController>().diceValue)
+		{
+			destPoint = target;
+		} else
+		{
+			Debug.Log("You can't move there!");
+		}
 	}
 
 	int GetClosestGameObject(Transform[] otherTransforms, Vector3 point)
