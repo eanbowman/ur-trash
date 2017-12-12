@@ -11,6 +11,7 @@ public class TokenHandler : MonoBehaviour {
 
 	private int destPoint = 0; // the current destination of the token
 	private int nextStep = 0; // the next step toward destPoint
+	private string gameState;
 
 	// Use this for initialization
 	void Start () {
