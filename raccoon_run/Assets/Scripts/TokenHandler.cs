@@ -9,7 +9,8 @@ public class TokenHandler : MonoBehaviour {
 	public bool isSelected;
 	public GameObject activationIndicator;
 
-	private int destPoint = 0;
+	private int destPoint = 0; // the current destination of the token
+	private int nextStep = 0; // the next step toward destPoint
 
 	// Use this for initialization
 	void Start () {
@@ -27,8 +28,8 @@ public class TokenHandler : MonoBehaviour {
 	void Update () {
 		// Choose the next destination point when the agent gets
 		// close to the current one.
-		/*if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.5f)
-			CheckCurrentTarget();*/
+		if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.5f)
+			CheckCurrentTarget();
 		if (this.isSelected)
 		{
 			activationIndicator.SetActive(true);
@@ -49,14 +50,15 @@ public class TokenHandler : MonoBehaviour {
 
 	void ActivateClickableObject(Vector3 point)
 	{
-		GameObject target = GetClosestGameObject(this.pathSteps.ToArray(), point);
-		Debug.Log("User clicked close to " + target.name);
-		navMeshAgent.SetDestination(target.transform.position);
+		int target = GetClosestGameObject(this.pathSteps.ToArray(), point);
+		Debug.Log("User clicked close to " + target);
+		//navMeshAgent.SetDestination(target.transform.position);
+		destPoint = target;
 	}
 
-	GameObject GetClosestGameObject(Transform[] otherTransforms, Vector3 point)
+	int GetClosestGameObject(Transform[] otherTransforms, Vector3 point)
 	{
-		GameObject closestTarget = null;
+		int closestTarget = -1;
 		// Set the initial closest distance really high. We don't want to return null.
 		float closestDistance = 1000;
 
@@ -66,7 +68,7 @@ public class TokenHandler : MonoBehaviour {
 			if (distanceFromTarget < closestDistance)
 			{
 				// We have a new closest target.
-				closestTarget = otherTransforms[i].gameObject;
+				closestTarget = i; // otherTransforms[i].gameObject;
 				closestDistance = distanceFromTarget;
 			}
 		}
@@ -82,10 +84,11 @@ public class TokenHandler : MonoBehaviour {
 			return;
 
 		// Set the agent to go to the currently selected destination.
-		navMeshAgent.destination = pathSteps[destPoint].position;
+		navMeshAgent.destination = pathSteps[nextStep].position;
 
 		// Choose the next point in the array as the destination,
 		// cycling to the start if necessary.
-		destPoint = (destPoint + 1) % pathSteps.Count;
+		// destPoint = (destPoint + 1) % pathSteps.Count;
+		if (destPoint > nextStep) nextStep = (nextStep + 1) % pathSteps.Count;
 	}
 }
