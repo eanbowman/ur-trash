@@ -19,6 +19,7 @@ public class GameController : MonoBehaviour {
 
 	public void RollDice()
 	{
-		diceValue = Random.Range(minRoll, maxRoll);
+		diceValue = Random.Range(minRoll, maxRoll+1);
+		if (diceValue > maxRoll || diceValue < minRoll) RollDice();
 	}
 }
