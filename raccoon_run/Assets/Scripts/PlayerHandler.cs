@@ -6,6 +6,8 @@ public class PlayerHandler : MonoBehaviour {
 	public bool hasControl = false;
 	public List<Transform> tokens;
 	public float hitBoxSize = 1.0f;
+	public int points = 0;
+	public int maxPoints = 7;
 
 	// Use this for initialization
 	void Start () {
@@ -34,11 +36,19 @@ public class PlayerHandler : MonoBehaviour {
 						Debug.Log("User clicked close to " + target.name);
 
 						// Toggle token selected state
-						target.GetComponent<TokenHandler>().isSelected = !target.GetComponent<TokenHandler>().isSelected;
+						if (!target.GetComponent<TokenHandler>().winner)
+						{
+							target.GetComponent<TokenHandler>().isSelected = !target.GetComponent<TokenHandler>().isSelected;
+						}
 					}
 				}
 			}
 		}
+	}
+
+	public void IncrementPoints()
+	{
+		this.points++;
 	}
 
 	GameObject GetClosestGameObject(Transform[] otherTransforms, Vector3 point)
