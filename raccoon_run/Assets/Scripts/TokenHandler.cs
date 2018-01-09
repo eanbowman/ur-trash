@@ -88,7 +88,7 @@ public class TokenHandler : MonoBehaviour {
 		Debug.Log("User clicked close to " + target);
 		//navMeshAgent.SetDestination(target.transform.position);
 		int difference = target - destPoint;
-		if (difference <= gameController.GetComponent<GameController>().diceValue)
+		if (difference == gameController.GetComponent<GameController>().diceValue)
 		{
 			destPoint = target;
 		} else
@@ -133,7 +133,7 @@ public class TokenHandler : MonoBehaviour {
 
 		// If the target is before the current step, 
 		// or it's the end, set it to the winning circle
-		if (!winner && (destPoint < nextStep || nextStep >= pathSteps.Count - 1))
+		if (!winner && (destPoint < nextStep || nextStep >= pathSteps.Count - 2))
 		{
 			//navMeshAgent.isStopped = true;
 			//transform.position = pathSteps[pathSteps.Count - 1].position;
