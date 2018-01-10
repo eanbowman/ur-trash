@@ -84,20 +84,66 @@ public class TokenHandler : MonoBehaviour {
 
 	void ActivateClickableObject(Vector3 point)
 	{
-		int target = GetClosestGameObject(this.pathSteps.ToArray(), point);
+		int target = GetClosestObjectID(this.pathSteps.ToArray(), point);
 		Debug.Log("User clicked close to " + target);
 		//navMeshAgent.SetDestination(target.transform.position);
 		int difference = target - destPoint;
 		if (difference == gameController.GetComponent<GameController>().diceValue)
 		{
-			destPoint = target;
+            // Find all token objects
+            GameObject[] tokenObjects = GameObject.FindGameObjectsWithTag("Token");
+            // Check if another piece occupies that space
+            GameObject otherObject = GetClosestGameObject(tokenObjects, point, 0.6f);
+
+            if (otherObject != null)
+            {
+                Debug.Log("Clicked on a token!");
+                // If the other object is the player's own token, don't allow the move
+                if (otherObject.GetComponent<TokenHandler>().playerNumber == this.playerNumber)
+                {
+                    Debug.Log("The other token is your own. You can't move there!");
+                } else
+                {
+                    Debug.Log("The other token is the opposite player's!");
+                }
+            }
+            else
+            {
+                destPoint = target;
+            }
 		} else
 		{
 			Debug.Log("You can't move there!");
 		}
 	}
 
-	int GetClosestGameObject(Transform[] otherTransforms, Vector3 point)
+    GameObject GetClosestGameObject(Transform[] otherTransforms, Vector3 point, float maxDistance)
+    {
+        int closestTarget = -1;
+        // Set the initial closest distance really high. We don't want to return null.
+        float closestDistance = 1000;
+
+        for (int i = 0; i < otherTransforms.Length; i++)
+        {
+            float distanceFromTarget = Vector3.Distance(point, otherTransforms[i].position);
+            if (distanceFromTarget < closestDistance)
+            {
+                // We have a new closest target.
+                closestTarget = otherTransforms[i].gameObject;
+                closestDistance = distanceFromTarget;
+            }
+        }
+        if (closestDistance < maxDistance)
+        {
+            return closestTarget;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    int GetClosestObjectID(Transform[] otherTransforms, Vector3 point)
 	{
 		int closestTarget = -1;
 		// Set the initial closest distance really high. We don't want to return null.
