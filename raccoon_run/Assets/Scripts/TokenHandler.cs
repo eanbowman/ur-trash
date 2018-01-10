@@ -117,19 +117,19 @@ public class TokenHandler : MonoBehaviour {
 		}
 	}
 
-    GameObject GetClosestGameObject(Transform[] otherTransforms, Vector3 point, float maxDistance)
+    GameObject GetClosestGameObject(GameObject[] otherTransforms, Vector3 point, float maxDistance)
     {
-        int closestTarget = -1;
+        GameObject closestTarget = null;
         // Set the initial closest distance really high. We don't want to return null.
         float closestDistance = 1000;
 
         for (int i = 0; i < otherTransforms.Length; i++)
         {
-            float distanceFromTarget = Vector3.Distance(point, otherTransforms[i].position);
+            float distanceFromTarget = Vector3.Distance(point, otherTransforms[i].transform.position);
             if (distanceFromTarget < closestDistance)
             {
                 // We have a new closest target.
-                closestTarget = otherTransforms[i].gameObject;
+                closestTarget = otherTransforms[i];
                 closestDistance = distanceFromTarget;
             }
         }
