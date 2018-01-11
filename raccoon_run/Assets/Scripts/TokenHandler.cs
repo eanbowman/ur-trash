@@ -105,6 +105,8 @@ public class TokenHandler : MonoBehaviour {
                 } else
                 {
                     Debug.Log("The other token is the opposite player's!");
+                    // Check if the other player's piece is on a safe space
+                    if (otherObject.GetComponent<TokenHandler>()) ;
                 }
             }
             else
