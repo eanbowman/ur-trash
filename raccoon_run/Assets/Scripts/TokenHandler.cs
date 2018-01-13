@@ -146,6 +146,7 @@ public class TokenHandler : MonoBehaviour {
         this.nextStep = 0;
         this.transform.position = this.pathSteps[nextStep].position;
         this.navMeshAgent.isStopped = true;
+        this.isSelected = false;
     }
 
     GameObject GetClosestGameObject(GameObject[] otherTransforms, Vector3 point, float maxDistance)
