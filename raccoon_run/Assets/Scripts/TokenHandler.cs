@@ -142,6 +142,7 @@ public class TokenHandler : MonoBehaviour {
     public void KnockBack()
     {
         this.destPoint = 0;
+        this.nextStep = 0;
     }
 
     GameObject GetClosestGameObject(GameObject[] otherTransforms, Vector3 point, float maxDistance)
@@ -221,6 +222,9 @@ public class TokenHandler : MonoBehaviour {
 		if (destPoint > nextStep)
 		{
 			nextStep = (nextStep + 1) % pathSteps.Count;
-		}
+		} else if( destPoint == 0 ) {
+            // Token has been knocked back to the waiting area
+            nextStep = 0;
+        }
 	}
 }
