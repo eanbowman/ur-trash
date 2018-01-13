@@ -38,6 +38,7 @@ public class TokenHandler : MonoBehaviour {
 		{
 			if (isSelected)
 			{
+                this.navMeshAgent.isStopped = false;
 				destPoint = 1; // player is selected, place them at the start
 				hasStarted = true;
 			}
@@ -143,6 +144,8 @@ public class TokenHandler : MonoBehaviour {
     {
         this.destPoint = 0;
         this.nextStep = 0;
+        this.transform.position = this.pathSteps[nextStep].position;
+        this.navMeshAgent.isStopped = true;
     }
 
     GameObject GetClosestGameObject(GameObject[] otherTransforms, Vector3 point, float maxDistance)
@@ -222,9 +225,6 @@ public class TokenHandler : MonoBehaviour {
 		if (destPoint > nextStep)
 		{
 			nextStep = (nextStep + 1) % pathSteps.Count;
-		} else if( destPoint == 0 ) {
-            // Token has been knocked back to the waiting area
-            nextStep = 0;
-        }
+		}
 	}
 }
