@@ -185,6 +185,7 @@ MonoBehaviour:
   winner: 0
   stoppingDistance: 0.5
   safeSpaces: 09000000
+  destPoint: 0
 --- !u!136 &136838892848505150
 CapsuleCollider:
   m_ObjectHideFlags: 1
