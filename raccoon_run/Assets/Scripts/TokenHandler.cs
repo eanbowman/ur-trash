@@ -115,6 +115,7 @@ public class TokenHandler : MonoBehaviour {
                     {
                         Debug.Log("Opponent is not safe! They are knocked back to the start.");
                         otherObject.GetComponent<TokenHandler>().KnockBack();
+                        destPoint = target; // we are allowed to take the space
                     }
                 }
             }
