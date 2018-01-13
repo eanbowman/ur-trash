@@ -10,15 +10,16 @@ public class TokenHandler : MonoBehaviour {
 	public GameObject activationIndicator;
 	public bool winner = false;
 	public float stoppingDistance = 0.5f;
+    public int[] safeSpaces;
 
-	private int destPoint = 0; // the current destination of the token
+	public int destPoint = 0; // the current destination of the token
 	private int nextStep = 0; // the next step toward destPoint
 	private bool hasStarted = false;
 	private GameObject gameController;
 
 	// Use this for initialization
 	void Start () {
-		this.navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
+        this.navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
 		GameObject pathObject = GameObject.Find("Pathway_Player" + this.playerNumber);
 		if (pathObject)
 		{
@@ -106,7 +107,14 @@ public class TokenHandler : MonoBehaviour {
                 {
                     Debug.Log("The other token is the opposite player's!");
                     // Check if the other player's piece is on a safe space
-                    if (otherObject.GetComponent<TokenHandler>()) ;
+                    if (otherObject.GetComponent<TokenHandler>().IsOnSafeSpace())
+                    {
+                        Debug.Log("Opponent on safe space");
+                    } else
+                    {
+                        Debug.Log("Opponent is not safe! They are knocked back to the start.");
+                        otherObject.GetComponent<TokenHandler>().KnockBack();
+                    }
                 }
             }
             else
@@ -118,6 +126,23 @@ public class TokenHandler : MonoBehaviour {
 			Debug.Log("You can't move there!");
 		}
 	}
+
+    bool IsOnSafeSpace()
+    {
+        bool status = false;
+        foreach(int safeSpace in this.safeSpaces)
+        {
+            if (this.destPoint == safeSpace) status = true;
+        }
+
+        return status;
+    }
+
+    // Reset this token to the start
+    public void KnockBack()
+    {
+        this.destPoint = 0;
+    }
 
     GameObject GetClosestGameObject(GameObject[] otherTransforms, Vector3 point, float maxDistance)
     {
