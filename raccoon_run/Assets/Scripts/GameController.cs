@@ -22,4 +22,16 @@ public class GameController : MonoBehaviour {
 		diceValue = Random.Range(minRoll, maxRoll+1);
 		if (diceValue > maxRoll || diceValue < minRoll) RollDice();
 	}
+
+    public void ChangeControl()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in players)
+        {
+            player.GetComponent<PlayerHandler>().hasControl = false;
+        }
+        if (playerNumber++ >= players.Length)
+            playerNumber = 0;
+        players[playerNumber].GetComponent<PlayerHandler>().hasControl = true;
+    }
 }

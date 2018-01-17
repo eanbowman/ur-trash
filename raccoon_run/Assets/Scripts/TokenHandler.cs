@@ -16,6 +16,7 @@ public class TokenHandler : MonoBehaviour {
 	private int nextStep = 0; // the next step toward destPoint
 	private bool hasStarted = false;
 	private GameObject gameController;
+    private GameObject playerHandler;
 
 	// Use this for initialization
 	void Start () {
@@ -223,10 +224,30 @@ public class TokenHandler : MonoBehaviour {
 			this.GetComponentInParent<PlayerHandler>().IncrementPoints();
 		}
 
-		// If the target is ahead, keep progressing to the next step.
-		if (destPoint > nextStep)
-		{
-			nextStep = (nextStep + 1) % pathSteps.Count;
-		}
+        // If the target is ahead, keep progressing to the next step.
+        if (destPoint > nextStep)
+        {
+            nextStep = (nextStep + 1) % pathSteps.Count;
+        }
+        else if (destPoint == nextStep)
+        {
+            // We've reached our destination
+            if (this.IsOnSafeSpace())
+            {
+                // and it's still our turn
+                Debug.Log("This token is at its destination and its turn is continuing. (Safe space)");
+            }
+            else
+            {
+                // and it's the other player's turn
+                Debug.Log("This token is at its destination and its turn is over");
+                this.gameController.GetComponent<GameController>().ChangeControl();
+            }
+        }
 	}
+
+    public void SetPlayerHandler(GameObject obj)
+    {
+        this.playerHandler = obj;
+    }
 }

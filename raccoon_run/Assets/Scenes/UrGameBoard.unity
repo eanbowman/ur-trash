@@ -2085,6 +2085,27 @@ Transform:
   m_PrefabParentObject: {fileID: 4463124587761612, guid: 26332e144776e0644be388cfaf84b49a,
     type: 2}
   m_PrefabInternal: {fileID: 1143839751}
+--- !u!1 &1612414339 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1052449067937712, guid: 6fb230d7f2710344c9587f45fe4b1873,
+    type: 2}
+  m_PrefabInternal: {fileID: 1539799771}
+--- !u!114 &1612414340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1612414339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd6de60f8fd8de54ca4f1f2f74df17eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasControl: 1
+  tokens: []
+  hitBoxSize: 1
+  points: 0
+  maxPoints: 7
 --- !u!1 &1669133935
 GameObject:
   m_ObjectHideFlags: 0

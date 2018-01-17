@@ -39,6 +39,7 @@ public class PlayerHandler : MonoBehaviour {
 						if (!target.GetComponent<TokenHandler>().winner)
 						{
 							target.GetComponent<TokenHandler>().isSelected = !target.GetComponent<TokenHandler>().isSelected;
+                            target.GetComponent<TokenHandler>().SetPlayerHandler(this.gameObject);
 						}
 					}
 				}
