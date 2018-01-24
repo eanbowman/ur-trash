@@ -30,8 +30,21 @@ public class GameController : MonoBehaviour {
         {
             player.GetComponent<PlayerHandler>().hasControl = false;
         }
-        if (playerNumber++ >= players.Length)
+        if (++playerNumber >= players.Length)
             playerNumber = 0;
-        players[playerNumber].GetComponent<PlayerHandler>().hasControl = true;
+        if (players != null && players.Length > 0)
+        {
+            Debug.Log("'players' exists and has elements");
+            Debug.Log("playerNumber: " + playerNumber);
+            if (players[playerNumber] != null)
+            {
+                Debug.Log("'players[playerNumber]' exists");
+                PlayerHandler handler = players[playerNumber].GetComponent<PlayerHandler>();
+                if (handler != null) {
+                    Debug.Log("PlayerHandler component exists in players[playerNumber]");
+                    handler.hasControl = true;
+                }
+            }
+        }
     }
 }

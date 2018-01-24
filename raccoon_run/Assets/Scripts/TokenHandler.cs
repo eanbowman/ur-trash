@@ -21,14 +21,14 @@ public class TokenHandler : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         this.navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
-		GameObject pathObject = GameObject.Find("Pathway_Player" + this.playerNumber);
+        gameController = GameObject.FindGameObjectsWithTag("GameController")[0];
+        GameObject pathObject = GameObject.Find("Pathway_Player" + this.playerNumber);
 		if (pathObject)
 		{
 			PathwayHandler pathwayHandler = pathObject.GetComponent<PathwayHandler>();
 			this.pathSteps = pathwayHandler.stops;
 			CheckCurrentTarget();
 		}
-		gameController = GameObject.FindGameObjectsWithTag("GameController")[0];
 	}
 	
 	// Update is called once per frame
