@@ -17,6 +17,7 @@ public class TokenHandler : MonoBehaviour {
 	private bool hasStarted = false;
 	private GameObject gameController;
     private GameObject playerHandler;
+    private bool isMoving = false;
 
 	// Use this for initialization
 	void Start () {
@@ -93,6 +94,7 @@ public class TokenHandler : MonoBehaviour {
 		int difference = target - destPoint;
 		if (difference == gameController.GetComponent<GameController>().diceValue)
 		{
+            this.isMoving = true;
             // Find all token objects
             GameObject[] tokenObjects = GameObject.FindGameObjectsWithTag("Token");
             // Check if another piece occupies that space
@@ -237,10 +239,12 @@ public class TokenHandler : MonoBehaviour {
                 // and it's still our turn
                 Debug.Log("This token is at its destination and its turn is continuing. (Safe space)");
             }
-            else
+            else if(this.isMoving == true)
             {
                 // and it's the other player's turn
                 Debug.Log("This token is at its destination and its turn is over");
+                this.isMoving = false;
+                this.isSelected = false;
                 this.gameController.GetComponent<GameController>().ChangeControl();
             }
         }
