@@ -1266,7 +1266,7 @@ MonoBehaviour:
   activationIndicator: {fileID: 1131562123844982}
   winner: 0
   stoppingDistance: 0.5
-  safeSpaces: 09000000
+  safeSpaces: 04000000080000000e000000
   destPoint: 0
 --- !u!114 &114101833306922758
 MonoBehaviour:
@@ -1286,7 +1286,7 @@ MonoBehaviour:
   activationIndicator: {fileID: 1152827157199094}
   winner: 0
   stoppingDistance: 0.5
-  safeSpaces: 09000000
+  safeSpaces: 04000000080000000e000000
   destPoint: 0
 --- !u!114 &114197829823746946
 MonoBehaviour:
@@ -1306,7 +1306,7 @@ MonoBehaviour:
   activationIndicator: {fileID: 1942134899299874}
   winner: 0
   stoppingDistance: 0.5
-  safeSpaces: 09000000
+  safeSpaces: 04000000080000000e000000
   destPoint: 0
 --- !u!114 &114390274985640102
 MonoBehaviour:
@@ -1326,7 +1326,7 @@ MonoBehaviour:
   activationIndicator: {fileID: 1514802763208278}
   winner: 0
   stoppingDistance: 0.5
-  safeSpaces: 09000000
+  safeSpaces: 04000000080000000e000000
   destPoint: 0
 --- !u!114 &114503038368697848
 MonoBehaviour:
@@ -1346,7 +1346,7 @@ MonoBehaviour:
   activationIndicator: {fileID: 1240555793383220}
   winner: 0
   stoppingDistance: 0.5
-  safeSpaces: 09000000
+  safeSpaces: 04000000080000000e000000
   destPoint: 0
 --- !u!114 &114506844053525932
 MonoBehaviour:
@@ -1366,7 +1366,7 @@ MonoBehaviour:
   activationIndicator: {fileID: 1890893348078326}
   winner: 0
   stoppingDistance: 0.5
-  safeSpaces: 09000000
+  safeSpaces: 04000000080000000e000000
   destPoint: 0
 --- !u!114 &114830583964486520
 MonoBehaviour:
@@ -1402,7 +1402,7 @@ MonoBehaviour:
   activationIndicator: {fileID: 1787209742806038}
   winner: 0
   stoppingDistance: 0.5
-  safeSpaces: 09000000
+  safeSpaces: 04000000080000000e000000
   destPoint: 0
 --- !u!136 &136128901309825992
 CapsuleCollider:
