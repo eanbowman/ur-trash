@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CPUTokenHandler : TokenHandler
 {
-	void Update()
+	void DebugUpdate()
 	{
 		// Choose the next destination point when the agent gets
 		// close to the current one.
