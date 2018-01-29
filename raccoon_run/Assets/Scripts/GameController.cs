@@ -26,15 +26,22 @@ public class GameController : MonoBehaviour {
     public void ChangeControl()
     {
         Debug.Log("#" + playerNumber  + " player currently has control");
+        /* This list does not necessarily come back in any logical order */
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject player in players)
-        {
-            player.GetComponent<PlayerHandler>().hasControl = false;
-        }
         playerNumber++;
         if (playerNumber >= players.Length)
             playerNumber = 0;
-        Debug.Log("All players set as not having control. Setting player #" + playerNumber + " to have control");
-        players[playerNumber].GetComponent<PlayerHandler>().hasControl = true;
+
+        foreach (GameObject player in players)
+        {
+            Debug.Log("Player " + player.name);
+            if ("Player " + (playerNumber + 1) + " Tokens" == player.name) {
+                player.GetComponent<PlayerHandler>().hasControl = true;
+                Debug.Log("has control.");
+            } else {
+                player.GetComponent<PlayerHandler>().hasControl = false;
+                Debug.Log("does not have control.");
+            }
+        }
     }
 }

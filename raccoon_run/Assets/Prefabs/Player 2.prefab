@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 4494984611559568}
   - component: {fileID: 114830583964486520}
   m_Layer: 0
-  m_Name: Tokens
+  m_Name: Player 2 Tokens
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

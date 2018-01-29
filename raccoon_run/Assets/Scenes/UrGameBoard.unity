@@ -478,6 +478,10 @@ Prefab:
       propertyPath: stops.Array.data[17]
       value: 
       objectReference: {fileID: 1216579772}
+    - target: {fileID: 1358574407104138, guid: c7ccc52e5d2bf154d85667e8bcecd6f0, type: 2}
+      propertyPath: m_Name
+      value: Player 1 Tokens
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c7ccc52e5d2bf154d85667e8bcecd6f0, type: 2}
   m_IsPrefabParent: 0
@@ -786,6 +790,10 @@ Prefab:
       propertyPath: stops.Array.data[17]
       value: 
       objectReference: {fileID: 1684534110}
+    - target: {fileID: 1052449067937712, guid: 6fb230d7f2710344c9587f45fe4b1873, type: 2}
+      propertyPath: m_Name
+      value: Player 2 Tokens
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6fb230d7f2710344c9587f45fe4b1873, type: 2}
   m_IsPrefabParent: 0
