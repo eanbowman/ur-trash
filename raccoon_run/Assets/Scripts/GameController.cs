@@ -1,24 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 	public string gameState = "Rolling"; // the first move is to roll the die
 	public int playerNumber = 0;
 	public int diceValue = 0;
+    public bool hasRolled = false;
 
 	public int maxRoll = 4;
 	public int minRoll = 0;
 
 	private Random r;
 
+    private Text status;
+
 	// Use this for initialization
 	void Start () {
-		playerNumber = Random.Range(0, 1);
+        this.status = GameObject.FindGameObjectWithTag("Status").GetComponent<Text>();
+        this.status.text = "Welcome to the Royal Game of UR!\n\n";
+        playerNumber = Random.Range(0, 1);
+        this.status.text += "Player #" + (playerNumber + 1) + "'s turn\n\n";
 	}
 
 	public void RollDice()
 	{
+        hasRolled = true;
 		diceValue = Random.Range(minRoll, maxRoll+1);
 		if (diceValue > maxRoll || diceValue < minRoll) RollDice();
 	}
@@ -31,6 +39,8 @@ public class GameController : MonoBehaviour {
         playerNumber++;
         if (playerNumber >= players.Length)
             playerNumber = 0;
+
+        hasRolled = false;
 
         foreach (GameObject player in players)
         {

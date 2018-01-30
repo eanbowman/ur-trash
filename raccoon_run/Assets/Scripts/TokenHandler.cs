@@ -15,14 +15,14 @@ public class TokenHandler : MonoBehaviour {
 	public int destPoint = 0; // the current destination of the token
 	private int nextStep = 0; // the next step toward destPoint
 	private bool hasStarted = false;
-	private GameObject gameController;
+	private GameController gameController;
     private GameObject playerHandler;
     private bool isMoving = false;
 
 	// Use this for initialization
 	void Start () {
         this.navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
-        gameController = GameObject.FindGameObjectsWithTag("GameController")[0];
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         GameObject pathObject = GameObject.Find("Pathway_Player" + this.playerNumber);
 		if (pathObject)
 		{
@@ -51,7 +51,7 @@ public class TokenHandler : MonoBehaviour {
 		}
 
 		// If this token is selected, we can move!
-		if (this.isSelected)
+		if (this.isSelected && gameController.hasRolled)
 		{
 			if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < stoppingDistance)
 				CheckCurrentTarget();
@@ -92,7 +92,7 @@ public class TokenHandler : MonoBehaviour {
 		Debug.Log("User clicked close to " + target);
 		//navMeshAgent.SetDestination(target.transform.position);
 		int difference = target - destPoint;
-		if (difference == gameController.GetComponent<GameController>().diceValue)
+		if (difference == gameController.diceValue)
 		{
             this.isMoving = true;
             // Find all token objects
@@ -245,7 +245,7 @@ public class TokenHandler : MonoBehaviour {
                 Debug.Log("This token is at its destination and its turn is over");
                 this.isMoving = false;
                 this.isSelected = false;
-                this.gameController.GetComponent<GameController>().ChangeControl();
+                this.gameController.ChangeControl();
             }
         }
 	}

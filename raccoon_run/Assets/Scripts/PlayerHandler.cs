@@ -9,9 +9,12 @@ public class PlayerHandler : MonoBehaviour {
 	public int points = 0;
 	public int maxPoints = 7;
 
+    private GameController gameController;
+
 	// Use this for initialization
 	void Start () {
-		foreach (Transform child in transform)
+        this.gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        foreach (Transform child in transform)
 		{
 			if (child.tag == "Token")
 			{
@@ -22,7 +25,7 @@ public class PlayerHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(this.hasControl)
+		if(this.hasControl && gameController.hasRolled)
 		{
 			if (Input.GetMouseButtonDown(0))
 			{
