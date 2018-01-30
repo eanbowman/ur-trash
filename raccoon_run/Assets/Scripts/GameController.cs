@@ -54,4 +54,9 @@ public class GameController : MonoBehaviour {
             }
         }
     }
+
+    public void AddStatus(string text)
+    {
+        this.status.text += text + "\n\n";
+    }
 }

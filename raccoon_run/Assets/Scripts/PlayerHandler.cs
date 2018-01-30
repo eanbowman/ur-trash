@@ -25,27 +25,32 @@ public class PlayerHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(this.hasControl && gameController.hasRolled)
+		if(this.hasControl)
 		{
 			if (Input.GetMouseButtonDown(0))
 			{
 				RaycastHit hit;
+                if (gameController.hasRolled)
+                {
+                    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+                    {
+                        GameObject target = GetClosestGameObject(this.tokens.ToArray(), hit.point);
+                        if (target)
+                        {
+                            Debug.Log("User clicked close to " + target.name);
 
-				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
-				{
-					GameObject target = GetClosestGameObject(this.tokens.ToArray(), hit.point);
-					if (target)
-					{
-						Debug.Log("User clicked close to " + target.name);
-
-						// Toggle token selected state
-						if (!target.GetComponent<TokenHandler>().winner)
-						{
-							target.GetComponent<TokenHandler>().isSelected = !target.GetComponent<TokenHandler>().isSelected;
-                            target.GetComponent<TokenHandler>().SetPlayerHandler(this.gameObject);
-						}
-					}
-				}
+                            // Toggle token selected state
+                            if (!target.GetComponent<TokenHandler>().winner)
+                            {
+                                target.GetComponent<TokenHandler>().isSelected = !target.GetComponent<TokenHandler>().isSelected;
+                                target.GetComponent<TokenHandler>().SetPlayerHandler(this.gameObject);
+                            }
+                        }
+                    }
+                } else
+                {
+                    gameController.AddStatus("Please roll the dice first!");
+                }
 			}
 		}
 	}
