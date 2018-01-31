@@ -89,7 +89,7 @@ public class TokenHandler : MonoBehaviour {
 	void ActivateClickableObject(Vector3 point)
 	{
 		int target = GetClosestObjectID(this.pathSteps.ToArray(), point);
-		Debug.Log("User clicked close to " + target);
+		gameController.AddStatus("User clicked close to " + target);
 		//navMeshAgent.SetDestination(target.transform.position);
 		int difference = target - destPoint;
 		if (difference == gameController.diceValue)
@@ -102,21 +102,21 @@ public class TokenHandler : MonoBehaviour {
 
             if (otherObject != null)
             {
-                Debug.Log("Clicked on a token!");
+                gameController.AddStatus("Clicked on a token!");
                 // If the other object is the player's own token, don't allow the move
                 if (otherObject.GetComponent<TokenHandler>().playerNumber == this.playerNumber)
                 {
-                    Debug.Log("The other token is your own. You can't move there!");
+                    gameController.AddStatus("The other token is your own. You can't move there!");
                 } else
                 {
-                    Debug.Log("The other token is the opposite player's!");
+                    gameController.AddStatus("The other token is the opposite player's!");
                     // Check if the other player's piece is on a safe space
                     if (otherObject.GetComponent<TokenHandler>().IsOnSafeSpace())
                     {
-                        Debug.Log("Opponent on safe space");
+                        gameController.AddStatus("Opponent on safe space");
                     } else
                     {
-                        Debug.Log("Opponent is not safe! They are knocked back to the start.");
+                        gameController.AddStatus("Opponent is not safe! They are knocked back to the start.");
                         otherObject.GetComponent<TokenHandler>().KnockBack();
                         destPoint = target; // we are allowed to take the space
                     }
@@ -128,7 +128,7 @@ public class TokenHandler : MonoBehaviour {
             }
 		} else
 		{
-			Debug.Log("You can't move there!");
+			gameController.AddStatus("You can't move there!");
 		}
 	}
 
@@ -237,12 +237,12 @@ public class TokenHandler : MonoBehaviour {
             if (this.IsOnSafeSpace())
             {
                 // and it's still our turn
-                Debug.Log("This token is at its destination and its turn is continuing. (Safe space)");
+                gameController.AddStatus("This token is at its destination and its turn is continuing. (Safe space)");
             }
             else if(this.isMoving == true)
             {
                 // and it's the other player's turn
-                Debug.Log("This token is at its destination and its turn is over");
+                gameController.AddStatus("This token is at its destination and its turn is over");
                 this.isMoving = false;
                 this.isSelected = false;
                 this.gameController.ChangeControl();

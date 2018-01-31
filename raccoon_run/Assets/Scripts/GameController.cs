@@ -19,9 +19,9 @@ public class GameController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         this.status = GameObject.FindGameObjectWithTag("Status").GetComponent<Text>();
-        this.status.text = "Welcome to the Royal Game of UR!\n\n";
+        this.AddStatus("Welcome to the Royal Game of UR!");
         playerNumber = Random.Range(0, 1);
-        this.status.text += "Player #" + (playerNumber + 1) + "'s turn\n\n";
+        this.AddStatus("Player #" + (playerNumber + 1) + "'s turn");
 	}
 
 	public void RollDice()
@@ -29,11 +29,12 @@ public class GameController : MonoBehaviour {
         hasRolled = true;
 		diceValue = Random.Range(minRoll, maxRoll+1);
 		if (diceValue > maxRoll || diceValue < minRoll) RollDice();
+        this.AddStatus("Player " + (playerNumber + 1) + " has rolled a " + diceValue);
 	}
 
     public void ChangeControl()
     {
-        Debug.Log("#" + playerNumber  + " player currently has control");
+        this.AddStatus("#" + playerNumber  + " player currently has control");
         /* This list does not necessarily come back in any logical order */
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         playerNumber++;
@@ -44,19 +45,19 @@ public class GameController : MonoBehaviour {
 
         foreach (GameObject player in players)
         {
-            Debug.Log("Player " + player.name);
+            this.AddStatus("Player " + player.name);
             if ("Player " + (playerNumber + 1) + " Tokens" == player.name) {
                 player.GetComponent<PlayerHandler>().hasControl = true;
-                Debug.Log("has control.");
+                this.AddStatus("has control.");
             } else {
                 player.GetComponent<PlayerHandler>().hasControl = false;
-                Debug.Log("does not have control.");
+                this.AddStatus("does not have control.");
             }
         }
     }
 
     public void AddStatus(string text)
     {
-        this.status.text += text + "\n\n";
+        this.status.text += text + "\n";
     }
 }

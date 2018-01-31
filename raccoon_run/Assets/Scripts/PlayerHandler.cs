@@ -37,7 +37,7 @@ public class PlayerHandler : MonoBehaviour {
                         GameObject target = GetClosestGameObject(this.tokens.ToArray(), hit.point);
                         if (target)
                         {
-                            Debug.Log("User clicked close to " + target.name);
+                            gameController.AddStatus("User clicked close to " + target.name);
 
                             // Toggle token selected state
                             if (!target.GetComponent<TokenHandler>().winner)
