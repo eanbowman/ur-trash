@@ -49,7 +49,7 @@ public class PlayerHandler : MonoBehaviour {
                     }
                 } else
                 {
-                    gameController.AddStatus("Please roll the dice first!");
+                    gameController.AddStatus("Player #" + (gameController.playerNumber+1) + " please roll the dice first!");
                 }
 			}
 		}
