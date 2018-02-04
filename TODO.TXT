@@ -1,6 +1,6 @@
 # A list of errors currently found in the game
 
-- When a token reaches the end, that player's turn should be over.
-- Clicking an invalid move should not end your turn.
+- Clicking an invalid move should not end your turn. (Don't think this happens anymore)
+- Token flags should be all reset at once in a single function (cleanup).
 
 Last Updated 2018/02/04
