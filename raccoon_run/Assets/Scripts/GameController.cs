@@ -38,6 +38,7 @@ public class GameController : MonoBehaviour {
         this.AddStatus("#" + playerNumber  + " player currently has control");
         /* This list does not necessarily come back in any logical order */
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] tokens = GameObject.FindGameObjectsWithTag("Token");
         playerNumber++;
         if (playerNumber >= players.Length)
             playerNumber = 0;
@@ -54,6 +55,11 @@ public class GameController : MonoBehaviour {
                 player.GetComponent<PlayerHandler>().hasControl = false;
                 this.AddStatus("does not have control.");
             }
+        }
+        // On turn changeover, no tokens are selected.
+        foreach(GameObject token in tokens)
+        {
+            token.GetComponent<TokenHandler>().isSelected = false;
         }
     }
 

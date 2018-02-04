@@ -78,7 +78,11 @@ public class TokenHandler : MonoBehaviour {
 			if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < stoppingDistance)
 			{
 				navMeshAgent.isStopped = true;
-			}
+                this.gameController.ChangeControl();
+                this.hasStarted = false;
+                this.isSelected = false;
+                this.isMoving = false;
+            }
 			else
 			{
 				navMeshAgent.destination = pathSteps[pathSteps.Count - 1].position;
