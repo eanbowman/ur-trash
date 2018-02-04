@@ -59,5 +59,6 @@ public class GameController : MonoBehaviour {
     public void AddStatus(string text)
     {
         this.status.text += text + "\n";
+        if(this.status.text.Length > 2000) this.status.text = this.status.text.Substring(1000);
     }
 }
