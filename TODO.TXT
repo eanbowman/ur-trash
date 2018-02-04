@@ -1,8 +1,7 @@
 # A list of errors currently found in the game
 
-- ScrollArea uses polygons to display text. Overflows at 65k. Should make ScrollArea only display last few lines.
-- Add scrollbar back into ScrollArea
 - When user rolls a zero, pass control back to other player properly.
 - When user lands on a safe space, infinite messages get sent to ScrollArea
+- When a token reaches the end, that player's turn should be over.
 
 Last Updated 2018/02/04
