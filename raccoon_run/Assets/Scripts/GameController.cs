@@ -30,6 +30,7 @@ public class GameController : MonoBehaviour {
 		diceValue = Random.Range(minRoll, maxRoll+1);
 		if (diceValue > maxRoll || diceValue < minRoll) RollDice();
         this.AddStatus("Player " + (playerNumber + 1) + " has rolled a " + diceValue);
+        if(diceValue == 0) ChangeControl();
 	}
 
     public void ChangeControl()
