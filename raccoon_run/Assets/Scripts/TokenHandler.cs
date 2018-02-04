@@ -71,17 +71,20 @@ public class TokenHandler : MonoBehaviour {
 			activationIndicator.SetActive(false);
 		}
 
-		// If this token has reached the end, move it to the winner's area
-		if (winner)
-		{
-			// If we've reached the winner's area, stop navigation and celebrate!
-			if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < stoppingDistance)
-			{
-				navMeshAgent.isStopped = true;
-                this.gameController.ChangeControl();
-                this.hasStarted = false;
-                this.isSelected = false;
-                this.isMoving = false;
+        // If this token has reached the end, move it to the winner's area
+        if (winner)
+        {
+            // If we've reached the winner's area, stop navigation and celebrate!
+            if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < stoppingDistance)
+            {
+                navMeshAgent.isStopped = true;
+                if (this.hasStarted || this.isSelected || this.isMoving)
+                {
+                    this.gameController.ChangeControl();
+                    this.hasStarted = false;
+                    this.isSelected = false;
+                    this.isMoving = false;
+                }
             }
 			else
 			{
