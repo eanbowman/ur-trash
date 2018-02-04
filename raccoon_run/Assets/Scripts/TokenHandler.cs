@@ -238,9 +238,10 @@ public class TokenHandler : MonoBehaviour {
         else if (destPoint == nextStep)
         {
             // We've reached our destination
-            if (this.IsOnSafeSpace())
+            if (this.IsOnSafeSpace() && this.isMoving)
             {
                 // and it's still our turn
+                this.isMoving = false; // Prevent a bajillion of these messages. Move is over anyway.
                 gameController.AddStatus("This token is at its destination and its turn is continuing. (Safe space)");
             }
             else if(this.isMoving == true)

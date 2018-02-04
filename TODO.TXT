@@ -1,6 +1,5 @@
 # A list of errors currently found in the game
 
-- When user lands on a safe space, infinite messages get sent to ScrollArea
 - When a token reaches the end, that player's turn should be over.
 - Clicking an invalid move should not end your turn.
 
