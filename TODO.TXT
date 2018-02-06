@@ -2,5 +2,11 @@
 
 - Clicking an invalid move should not end your turn. (Don't think this happens anymore)
 - Token flags should be all reset at once in a single function (cleanup).
+- Knockback doesn't always work
+- De-select token after safe space move? (Or fix bugs)
+- Join the party bug
+- Win / Changeover confusion?
+- Tom Scott Display required
+- Lazy tokens because of knockback
 
 Last Updated 2018/02/04
