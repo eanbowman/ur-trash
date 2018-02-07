@@ -16,7 +16,6 @@ public class TokenHandler : MonoBehaviour {
 	private int nextStep = 0; // the next step toward destPoint
 	private bool hasStarted = false;
 	private GameController gameController;
-    private GameObject playerHandler;
     private bool isMoving = false;
 
 	// Use this for initialization
@@ -257,9 +256,4 @@ public class TokenHandler : MonoBehaviour {
             }
         }
 	}
-
-    public void SetPlayerHandler(GameObject obj)
-    {
-        this.playerHandler = obj;
-    }
 }

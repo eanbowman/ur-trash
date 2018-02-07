@@ -12,8 +12,6 @@ public class GameController : MonoBehaviour {
 	public int maxRoll = 4;
 	public int minRoll = 0;
 
-	private Random r;
-
     private Text status;
 
 	// Use this for initialization
