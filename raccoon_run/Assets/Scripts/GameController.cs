@@ -20,20 +20,24 @@ public class GameController : MonoBehaviour {
         this.AddStatus("Welcome to the Royal Game of UR!");
         playerNumber = Random.Range(0, 1);
         this.AddStatus("Player #" + (playerNumber + 1) + "'s turn");
-	}
 
-	public void RollDice()
+        SetControl(playerNumber + 1);
+    }
+
+    public void RollDice()
 	{
+        GameObject[] dice = GameObject.FindGameObjectsWithTag("DiceButton");
         hasRolled = true;
 		diceValue = Random.Range(minRoll, maxRoll+1);
 		if (diceValue > maxRoll || diceValue < minRoll) RollDice();
         this.AddStatus("Player " + (playerNumber + 1) + " has rolled a " + diceValue);
         if(diceValue == 0) ChangeControl();
-	}
+        dice[0].GetComponent<Text>().text = "Roll Dice " + diceValue;
+    }
 
     public void ChangeControl()
     {
-        this.AddStatus("#" + playerNumber  + " player currently has control");
+        this.AddStatus("#" + playerNumber + " player currently has control");
         /* This list does not necessarily come back in any logical order */
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         GameObject[] tokens = GameObject.FindGameObjectsWithTag("Token");
@@ -43,21 +47,26 @@ public class GameController : MonoBehaviour {
 
         hasRolled = false;
 
-        foreach (GameObject player in players)
-        {
-            this.AddStatus("Player " + player.name);
-            if ("Player " + (playerNumber + 1) + " Tokens" == player.name) {
-                player.GetComponent<PlayerHandler>().hasControl = true;
-                this.AddStatus("has control.");
-            } else {
-                player.GetComponent<PlayerHandler>().hasControl = false;
-                this.AddStatus("does not have control.");
-            }
-        }
+        SetControl(this.playerNumber  + 1);
         // On turn changeover, no tokens are selected.
-        foreach(GameObject token in tokens)
+        foreach (GameObject token in tokens)
         {
             token.GetComponent<TokenHandler>().isSelected = false;
+        }
+    }
+
+    public void SetControl(int playerToActivate)
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in players)
+        {
+            if (player.GetComponent<PlayerHandler>().playerNumber == playerToActivate)
+            {
+                player.GetComponent<PlayerHandler>().hasControl = true;
+            } else
+            {
+                player.GetComponent<PlayerHandler>().hasControl = false;
+            }
         }
     }
 

@@ -8,6 +8,7 @@ public class PlayerHandler : MonoBehaviour {
 	public float hitBoxSize = 1.0f;
 	public int points = 0;
 	public int maxPoints = 7;
+    public int playerNumber;
 
     private GameController gameController;
 
@@ -22,14 +23,17 @@ public class PlayerHandler : MonoBehaviour {
 			}
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		if(this.hasControl)
-		{
-			if (Input.GetMouseButtonDown(0))
-			{
-				RaycastHit hit;
+
+    // Update is called once per frame
+    void Update() {
+        if (this.hasControl)
+        {
+            // If player has control, highlight all pieces
+            HighlightAllTokens();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                RaycastHit hit;
                 if (gameController.hasRolled)
                 {
                     if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
@@ -46,18 +50,40 @@ public class PlayerHandler : MonoBehaviour {
                             }
                         }
                     }
-                } else
-                {
-                    gameController.AddStatus("Player #" + (gameController.playerNumber+1) + " please roll the dice first!");
                 }
-			}
-		}
+                else
+                {
+                    gameController.AddStatus("Player #" + (gameController.playerNumber + 1) + " please roll the dice first!");
+                }
+            }
+        } else {
+            DeselectAllTokens();
+        }
 	}
 
 	public void IncrementPoints()
 	{
 		this.points++;
 	}
+
+    private void HighlightAllTokens()
+    {
+        // Reset selection of all pieces
+        foreach (Transform token in this.tokens)
+        {
+            token.GetComponent<TokenHandler>().isHighlighted = true;
+        }
+    }
+
+    private void DeselectAllTokens()
+    {
+        // Reset selection of all pieces
+        foreach (Transform token in this.tokens)
+        {
+            token.GetComponent<TokenHandler>().isSelected = false;
+            token.GetComponent<TokenHandler>().isHighlighted = false;
+        }
+    }
 
 	GameObject GetClosestGameObject(Transform[] otherTransforms, Vector3 point)
 	{

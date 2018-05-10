@@ -7,6 +7,7 @@ public class TokenHandler : MonoBehaviour {
 	public List<Transform> pathSteps;
 	public int playerNumber;
 	public bool isSelected;
+    public bool isHighlighted;
 	public GameObject activationIndicator;
 	public bool winner = false;
 	public float stoppingDistance = 0.5f;
@@ -17,9 +18,12 @@ public class TokenHandler : MonoBehaviour {
 	private bool hasStarted = false;
 	private GameController gameController;
     private bool isMoving = false;
+    private Material m_Material;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
+        this.isHighlighted = false;
+        m_Material = GetComponent<Renderer>().material;
         this.navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         GameObject pathObject = GameObject.Find("Pathway_Player" + this.playerNumber);
@@ -33,6 +37,18 @@ public class TokenHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        // If this token is highlighted, show the highlight
+        // requires Toon/Basic Outline or Toon/Lighted Outline shader!
+        Color color = Color.green; // glow color
+        float duration = 2.0f; // duration of each cycle in seconds
+        if (this.isHighlighted == true) {
+            Color c = Sinusoid(duration, 0.0f, 0.75f);
+            m_Material.SetColor("_SpecColor", c);
+        } else {
+            Color c = Color.black;
+            m_Material.SetColor("_SpecColor", c);
+        }
+
 		// Choose the next destination point when the agent gets
 		// close to the current one.
 		if (!hasStarted)
@@ -244,6 +260,7 @@ public class TokenHandler : MonoBehaviour {
             {
                 // and it's still our turn
                 this.isMoving = false; // Prevent a bajillion of these messages. Move is over anyway.
+                gameController.hasRolled = false; // Prevent the user from re-using the same roll
                 gameController.AddStatus("This token is at its destination and its turn is continuing. (Safe space)");
             }
             else if(this.isMoving == true)
@@ -256,4 +273,12 @@ public class TokenHandler : MonoBehaviour {
             }
         }
 	}
+
+    private Color Sinusoid(float period, float min, float max) {
+        float bias = (min + max) / 2;
+        float depth = (max - min) / 2;
+        return new Color(depth * Mathf.Sin(2 * Mathf.PI * Time.time / period) + bias,
+            depth * Mathf.Sin(2*Mathf.PI* Time.time/period)+bias,
+            depth * Mathf.Sin(2 * Mathf.PI * Time.time / period) + bias);
+    } 
 }
