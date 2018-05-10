@@ -1,5 +1,13 @@
 # A list of errors currently found in the game
 
+# 2018/05/09 Fixed a few bugs, found some
+
+- After dice rolled / piece chosen, that piece should move automatically
+- Don't allow multiple selection (probably remove activation indicator)
+- Check for valid moves after roll, if none, turnover
+
+# Old Bugs
+
 - Clicking an invalid move should not end your turn. (Don't think this happens anymore)
 - Token flags should be all reset at once in a single function (cleanup).
 - Knockback doesn't always work
