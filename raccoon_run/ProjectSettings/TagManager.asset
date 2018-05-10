@@ -7,6 +7,7 @@ TagManager:
   - Token
   - Status
   - DialogueBox
+  - DiceButton
   layers:
   - Default
   - TransparentFX

@@ -25,14 +25,17 @@ public class GameController : MonoBehaviour {
     }
 
     public void RollDice()
-	{
+    {
         GameObject[] dice = GameObject.FindGameObjectsWithTag("DiceButton");
         hasRolled = true;
-		diceValue = Random.Range(minRoll, maxRoll+1);
-		if (diceValue > maxRoll || diceValue < minRoll) RollDice();
+        diceValue = Random.Range(minRoll, maxRoll + 1);
+        if (diceValue > maxRoll || diceValue < minRoll) RollDice();
         this.AddStatus("Player " + (playerNumber + 1) + " has rolled a " + diceValue);
-        if(diceValue == 0) ChangeControl();
-        dice[0].GetComponent<Text>().text = "Roll Dice " + diceValue;
+        if (diceValue == 0) ChangeControl();
+        foreach (GameObject die in dice)
+        {
+            die.GetComponent<Text>().text = "Dice Roll " + diceValue;
+        }
     }
 
     public void ChangeControl()
