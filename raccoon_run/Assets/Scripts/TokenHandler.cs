@@ -19,18 +19,19 @@ public class TokenHandler : MonoBehaviour {
 	private GameController gameController;
     private bool isMoving = false;
     private Material m_Material;
+    private PathwayHandler pathwayHandler;
 
     // Use this for initialization
     void Start () {
-        this.isHighlighted = false;
+        isHighlighted = false;
         m_Material = GetComponent<Renderer>().material;
-        this.navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
+        navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        GameObject pathObject = GameObject.Find("Pathway_Player" + this.playerNumber);
+        GameObject pathObject = GameObject.Find("Pathway_Player" + playerNumber);
 		if (pathObject)
 		{
-			PathwayHandler pathwayHandler = pathObject.GetComponent<PathwayHandler>();
-			this.pathSteps = pathwayHandler.stops;
+            pathwayHandler = pathObject.GetComponent<PathwayHandler>();
+            pathSteps = pathwayHandler.stops;
 			CheckCurrentTarget();
 		}
 	}
@@ -41,7 +42,7 @@ public class TokenHandler : MonoBehaviour {
         // requires Toon/Basic Outline or Toon/Lighted Outline shader!
         Color color = Color.green; // glow color
         float duration = 2.0f; // duration of each cycle in seconds
-        if (this.isHighlighted == true) {
+        if (isHighlighted == true) {
             Color c = Sinusoid(duration, 0.0f, 0.75f);
             m_Material.SetColor("_SpecColor", c);
         } else {
@@ -55,7 +56,7 @@ public class TokenHandler : MonoBehaviour {
 		{
 			if (isSelected)
 			{
-                this.navMeshAgent.isStopped = false;
+                navMeshAgent.isStopped = false;
 				destPoint = 1; // player is selected, place them at the start
 				hasStarted = true;
 			}
@@ -66,7 +67,7 @@ public class TokenHandler : MonoBehaviour {
 		}
 
 		// If this token is selected, we can move!
-		if (this.isSelected && gameController.hasRolled)
+		if (isSelected && gameController.hasRolled)
 		{
 			if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < stoppingDistance)
 				CheckCurrentTarget();
@@ -93,12 +94,12 @@ public class TokenHandler : MonoBehaviour {
             if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < stoppingDistance)
             {
                 navMeshAgent.isStopped = true;
-                if (this.hasStarted || this.isSelected || this.isMoving)
+                if (hasStarted || isSelected || isMoving)
                 {
-                    this.gameController.ChangeControl();
-                    this.hasStarted = false;
-                    this.isSelected = false;
-                    this.isMoving = false;
+                    gameController.ChangeControl();
+                    hasStarted = false;
+                    isSelected = false;
+                    isMoving = false;
                 }
             }
 			else
@@ -108,25 +109,30 @@ public class TokenHandler : MonoBehaviour {
 		}
 	}
 
+    void ClaimSpaceOnBoard(int space)
+    {
+        pathwayHandler.vacancy[space] = false;
+    }
+
 	void ActivateClickableObject(Vector3 point)
 	{
-		int target = GetClosestObjectID(this.pathSteps.ToArray(), point);
+		int target = GetClosestObjectID(pathSteps.ToArray(), point);
 		gameController.AddStatus("User clicked close to " + target);
 		//navMeshAgent.SetDestination(target.transform.position);
 		int difference = target - destPoint;
 		if (difference == gameController.diceValue)
 		{
-            this.isMoving = true;
+            isMoving = true;
             // Find all token objects
             GameObject[] tokenObjects = GameObject.FindGameObjectsWithTag("Token");
             // Check if another piece occupies that space
             GameObject otherObject = GetClosestGameObject(tokenObjects, point, 0.6f);
 
-            if (otherObject != null)
+            if (otherObject != null || !pathwayHandler.SetVacancy(target))
             {
                 gameController.AddStatus("Clicked on a token!");
                 // If the other object is the player's own token, don't allow the move
-                if (otherObject.GetComponent<TokenHandler>().playerNumber == this.playerNumber)
+                if (otherObject.GetComponent<TokenHandler>().playerNumber == playerNumber)
                 {
                     gameController.AddStatus("The other token is your own. You can't move there!");
                 } else
@@ -140,12 +146,14 @@ public class TokenHandler : MonoBehaviour {
                     {
                         gameController.AddStatus("Opponent is not safe! They are knocked back to the start.");
                         otherObject.GetComponent<TokenHandler>().KnockBack();
+                        pathwayHandler.LeaveSpot(nextStep);
                         destPoint = target; // we are allowed to take the space
                     }
                 }
             }
             else
             {
+                pathwayHandler.LeaveSpot(nextStep);
                 destPoint = target;
             }
 		} else
@@ -157,9 +165,9 @@ public class TokenHandler : MonoBehaviour {
     bool IsOnSafeSpace()
     {
         bool status = false;
-        foreach(int safeSpace in this.safeSpaces)
+        foreach(int safeSpace in safeSpaces)
         {
-            if (this.destPoint == safeSpace) status = true;
+            if (destPoint == safeSpace) status = true;
         }
 
         return status;
@@ -168,11 +176,11 @@ public class TokenHandler : MonoBehaviour {
     // Reset this token to the start
     public void KnockBack()
     {
-        this.destPoint = 0;
-        this.nextStep = 0;
-        this.transform.position = this.pathSteps[nextStep].position;
-        this.navMeshAgent.isStopped = true;
-        this.isSelected = false;
+        destPoint = 0;
+        nextStep = 0;
+        transform.position = pathSteps[nextStep].position;
+        navMeshAgent.isStopped = true;
+        isSelected = false;
     }
 
     GameObject GetClosestGameObject(GameObject[] otherTransforms, Vector3 point, float maxDistance)
@@ -243,9 +251,9 @@ public class TokenHandler : MonoBehaviour {
 			//transform.position = pathSteps[pathSteps.Count - 1].position;
 			//transform.rotation = pathSteps[pathSteps.Count - 1].rotation;
 			destPoint = pathSteps.Count - 1;
-			this.isSelected = false;
-			this.winner = true;
-			this.GetComponentInParent<PlayerHandler>().IncrementPoints();
+			isSelected = false;
+			winner = true;
+			GetComponentInParent<PlayerHandler>().IncrementPoints();
 		}
 
         // If the target is ahead, keep progressing to the next step.
@@ -256,20 +264,20 @@ public class TokenHandler : MonoBehaviour {
         else if (destPoint == nextStep)
         {
             // We've reached our destination
-            if (this.IsOnSafeSpace() && this.isMoving)
+            if (IsOnSafeSpace() && isMoving)
             {
                 // and it's still our turn
-                this.isMoving = false; // Prevent a bajillion of these messages. Move is over anyway.
+                isMoving = false; // Move is over
                 gameController.hasRolled = false; // Prevent the user from re-using the same roll
                 gameController.AddStatus("This token is at its destination and its turn is continuing. (Safe space)");
             }
-            else if(this.isMoving == true)
+            else if(isMoving == true)
             {
                 // and it's the other player's turn
                 gameController.AddStatus("This token is at its destination and its turn is over");
-                this.isMoving = false;
-                this.isSelected = false;
-                this.gameController.ChangeControl();
+                isMoving = false;
+                isSelected = false;
+                gameController.ChangeControl();
             }
         }
 	}
