@@ -109,10 +109,9 @@ public class TokenHandler : MonoBehaviour {
 		}
 	}
 
-    void ClaimSpaceOnBoard(int space)
-    {
-        pathwayHandler.vacancy[space] = false;
-    }
+	void ClaimSpaceOnBoard(int space) {
+		pathwayHandler.SetVacancy(space);
+	}
 
 	void ActivateClickableObject(Vector3 point)
 	{
