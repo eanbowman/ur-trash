@@ -15,6 +15,15 @@ public class PathwayHandler : MonoBehaviour {
         }
     }
 
+    public bool GetVacancy(int spot)
+    {
+        if (spot < vacancy.Length)
+        {
+            return vacancy[spot];
+        }
+        return false;
+    }
+
     public bool SetVacancy(int spot)
     {
         if (spot < vacancy.Length && vacancy[spot] == true)

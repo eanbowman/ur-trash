@@ -58,6 +58,20 @@ public class GameController : MonoBehaviour {
         }
     }
 
+    public bool CheckForOtherPlayerTokens(int currentPlayerNumber, int spotIndex)
+    {
+        GameObject ph;
+        if (currentPlayerNumber == 1)
+        {
+            ph = GameObject.Find("Pathway_Player2");
+        }
+        else
+        {
+            ph = GameObject.Find("Pathway_Player1");
+        }
+        return ph.GetComponent<PathwayHandler>().GetVacancy(spotIndex);
+    }
+
     public void SetControl(int playerToActivate)
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
@@ -76,6 +90,7 @@ public class GameController : MonoBehaviour {
     public void AddStatus(string text)
     {
         this.status.text += text + "\n";
-        if(this.status.text.Length > 2000) this.status.text = this.status.text.Substring(1000);
+        // Status buffer is 2000 characters long
+        if(this.status.text.Length > 2000) this.status.text = this.status.text.Substring(2000);
     }
 }

@@ -146,6 +146,7 @@ public class TokenHandler : MonoBehaviour {
                         gameController.AddStatus("Opponent is not safe! They are knocked back to the start.");
                         otherObject.GetComponent<TokenHandler>().KnockBack();
                         pathwayHandler.LeaveSpot(nextStep);
+                        pathwayHandler.SetVacancy(destPoint);
                         destPoint = target; // we are allowed to take the space
                     }
                 }
