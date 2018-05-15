@@ -53,7 +53,7 @@ public class TokenHandler : MonoBehaviour {
 		if (!hasStarted) {
 			if (isSelected) {
 				navMeshAgent.isStopped = false;
-				targetBoardSpace = 1; // player is selected, place them at the start
+				//targetBoardSpace = 1; // player is selected, place them at the start
 				hasStarted = true;
 			} else {
 				targetBoardSpace = 0; // player is not selected, place them in the waiting area
@@ -98,7 +98,7 @@ public class TokenHandler : MonoBehaviour {
 		pathwayHandler.SetVacancy(space);
 	}
 
-	void ActivateClickableObject(Vector3 point) {
+	public void ActivateClickableObject(Vector3 point) {
 		// New strategy: player can only click on their own pieces!
 		// If a piece can move to the space represented by the
 		// number of spaces ahead on the die, then the new destination

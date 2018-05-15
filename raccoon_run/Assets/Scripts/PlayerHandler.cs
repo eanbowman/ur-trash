@@ -46,7 +46,8 @@ public class PlayerHandler : MonoBehaviour {
 							// Toggle token selected state
 							if (!target.GetComponent<TokenHandler>().winner)
 							{
-								target.GetComponent<TokenHandler>().isSelected = !target.GetComponent<TokenHandler>().isSelected;
+								SetSelected(target);
+								target.GetComponent<TokenHandler>().ActivateClickableObject(target.GetComponent<Transform>().position);
 							}
 						}
 					}
@@ -59,6 +60,13 @@ public class PlayerHandler : MonoBehaviour {
 		} else {
 			DeselectAllTokens();
 		}
+	}
+
+	private void SetSelected(GameObject target) {
+		foreach(Transform token in tokens) {
+			token.GetComponent<TokenHandler>().isSelected = false;
+		}
+		target.GetComponent<TokenHandler>().isSelected = true;
 	}
 
 	public void IncrementPoints()
