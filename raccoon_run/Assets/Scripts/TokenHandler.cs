@@ -22,22 +22,21 @@ public class TokenHandler : MonoBehaviour {
 	private PathwayHandler pathwayHandler;
 
 	// Use this for initialization
-	void Start () {
+	void Start() {
 		isHighlighted = false;
 		m_Material = GetComponent<Renderer>().material;
 		navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
 		gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
 		GameObject pathObject = GameObject.Find("Pathway_Player" + playerNumber);
-		if (pathObject)
-		{
+		if (pathObject) {
 			pathwayHandler = pathObject.GetComponent<PathwayHandler>();
 			pathSteps = pathwayHandler.stops;
 			CheckCurrentTarget();
 		}
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
+	void Update() {
 		// If this token is highlighted, show the highlight
 		// requires Toon/Basic Outline or Toon/Lighted Outline shader!
 		float duration = 2.0f; // duration of each cycle in seconds
@@ -51,58 +50,45 @@ public class TokenHandler : MonoBehaviour {
 
 		// Choose the next destination point when the agent gets
 		// close to the current one.
-		if (!hasStarted)
-		{
-			if (isSelected)
-			{
+		if (!hasStarted) {
+			if (isSelected) {
 				navMeshAgent.isStopped = false;
 				destPoint = 1; // player is selected, place them at the start
 				hasStarted = true;
-			}
-			else
-			{
+			} else {
 				destPoint = 0; // player is not selected, place them in the waiting area
 			}
 		}
 
 		// If this token is selected, we can move!
-		if (isSelected && gameController.hasRolled)
-		{
+		if (isSelected && gameController.hasRolled) {
 			if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < stoppingDistance)
 				CheckCurrentTarget();
 
 			activationIndicator.SetActive(true);
-			if (Input.GetMouseButtonDown(0))
-			{
+			if (Input.GetMouseButtonDown(0)) {
 				RaycastHit hit;
 
-				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
-				{
+				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100)) {
 					ActivateClickableObject(hit.point);
 				}
 			}
-		} else
-		{
+		} else {
 			activationIndicator.SetActive(false);
 		}
 
 		// If this token has reached the end, move it to the winner's area
-		if (winner)
-		{
+		if (winner) {
 			// If we've reached the winner's area, stop navigation and celebrate!
-			if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < stoppingDistance)
-			{
+			if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < stoppingDistance) {
 				navMeshAgent.isStopped = true;
-				if (hasStarted || isSelected || isMoving)
-				{
+				if (hasStarted || isSelected || isMoving) {
 					gameController.ChangeControl();
 					hasStarted = false;
 					isSelected = false;
 					isMoving = false;
 				}
-			}
-			else
-			{
+			} else {
 				navMeshAgent.destination = pathSteps[pathSteps.Count - 1].position;
 			}
 		}
@@ -112,36 +98,29 @@ public class TokenHandler : MonoBehaviour {
 		pathwayHandler.SetVacancy(space);
 	}
 
-	void ActivateClickableObject(Vector3 point)
-	{
+	void ActivateClickableObject(Vector3 point) {
 		int target = GetClosestObjectID(pathSteps.ToArray(), point);
 		gameController.AddStatus("User clicked close to " + target);
 		//navMeshAgent.SetDestination(target.transform.position);
 		int difference = target - destPoint;
-		if (difference == gameController.diceValue)
-		{
+		if (difference == gameController.diceValue) {
 			isMoving = true;
 			// Find all token objects
 			GameObject[] tokenObjects = GameObject.FindGameObjectsWithTag("Token");
 			// Check if another piece occupies that space
 			GameObject otherObject = GetClosestGameObject(tokenObjects, point, 0.6f);
 
-			if (otherObject != null || !pathwayHandler.SetVacancy(target))
-			{
+			if (otherObject != null || !pathwayHandler.SetVacancy(target)) {
 				gameController.AddStatus("Clicked on a token!");
 				// If the other object is the player's own token, don't allow the move
-				if (otherObject.GetComponent<TokenHandler>().playerNumber == playerNumber)
-				{
+				if (otherObject.GetComponent<TokenHandler>().playerNumber == playerNumber) {
 					gameController.AddStatus("The other token is your own. You can't move there!");
-				} else
-				{
+				} else {
 					gameController.AddStatus("The other token is the opposite player's!");
 					// Check if the other player's piece is on a safe space
-					if (otherObject.GetComponent<TokenHandler>().IsOnSafeSpace())
-					{
+					if (otherObject.GetComponent<TokenHandler>().IsOnSafeSpace()) {
 						gameController.AddStatus("Opponent on safe space");
-					} else
-					{
+					} else {
 						gameController.AddStatus("Opponent is not safe! They are knocked back to the start.");
 						otherObject.GetComponent<TokenHandler>().KnockBack();
 						pathwayHandler.LeaveSpot(nextStep);
@@ -149,23 +128,18 @@ public class TokenHandler : MonoBehaviour {
 						destPoint = target; // we are allowed to take the space
 					}
 				}
-			}
-			else
-			{
+			} else {
 				pathwayHandler.LeaveSpot(nextStep);
 				destPoint = target;
 			}
-		} else
-		{
+		} else {
 			gameController.AddStatus("You can't move there!");
 		}
 	}
 
-	bool IsOnSafeSpace()
-	{
+	bool IsOnSafeSpace() {
 		bool status = false;
-		foreach(int safeSpace in safeSpaces)
-		{
+		foreach (int safeSpace in safeSpaces) {
 			if (destPoint == safeSpace) status = true;
 		}
 
@@ -173,8 +147,7 @@ public class TokenHandler : MonoBehaviour {
 	}
 
 	// Reset this token to the start
-	public void KnockBack()
-	{
+	public void KnockBack() {
 		destPoint = 0;
 		nextStep = 0;
 		transform.position = pathSteps[nextStep].position;
@@ -182,43 +155,34 @@ public class TokenHandler : MonoBehaviour {
 		isSelected = false;
 	}
 
-	GameObject GetClosestGameObject(GameObject[] otherTransforms, Vector3 point, float maxDistance)
-	{
+	GameObject GetClosestGameObject(GameObject[] otherTransforms, Vector3 point, float maxDistance) {
 		GameObject closestTarget = null;
 		// Set the initial closest distance really high. We don't want to return null.
 		float closestDistance = 1000;
 
-		for (int i = 0; i < otherTransforms.Length; i++)
-		{
+		for (int i = 0; i < otherTransforms.Length; i++) {
 			float distanceFromTarget = Vector3.Distance(point, otherTransforms[i].transform.position);
-			if (distanceFromTarget < closestDistance)
-			{
+			if (distanceFromTarget < closestDistance) {
 				// We have a new closest target.
 				closestTarget = otherTransforms[i];
 				closestDistance = distanceFromTarget;
 			}
 		}
-		if (closestDistance < maxDistance)
-		{
+		if (closestDistance < maxDistance) {
 			return closestTarget;
-		}
-		else
-		{
+		} else {
 			return null;
 		}
 	}
 
-	int GetClosestObjectID(Transform[] otherTransforms, Vector3 point)
-	{
+	int GetClosestObjectID(Transform[] otherTransforms, Vector3 point) {
 		int closestTarget = -1;
 		// Set the initial closest distance really high. We don't want to return null.
 		float closestDistance = 1000;
 
-		for (int i = 0; i < otherTransforms.Length; i++)
-		{
+		for (int i = 0; i < otherTransforms.Length; i++) {
 			float distanceFromTarget = Vector3.Distance(point, otherTransforms[i].position);
-			if (distanceFromTarget < closestDistance)
-			{
+			if (distanceFromTarget < closestDistance) {
 				// We have a new closest target.
 				closestTarget = i; // otherTransforms[i].gameObject;
 				closestDistance = distanceFromTarget;
@@ -229,8 +193,7 @@ public class TokenHandler : MonoBehaviour {
 	}
 
 
-	public void CheckCurrentTarget()
-	{
+	public void CheckCurrentTarget() {
 		// Returns if no points have been set up
 		if (pathSteps.Count == 0)
 			return;
@@ -244,8 +207,7 @@ public class TokenHandler : MonoBehaviour {
 
 		// If the target is before the current step, 
 		// or it's the end, set it to the winning circle
-		if (!winner && (destPoint < nextStep || nextStep >= pathSteps.Count - 2))
-		{
+		if (!winner && (destPoint < nextStep || nextStep >= pathSteps.Count - 2)) {
 			//navMeshAgent.isStopped = true;
 			//transform.position = pathSteps[pathSteps.Count - 1].position;
 			//transform.rotation = pathSteps[pathSteps.Count - 1].rotation;
@@ -256,22 +218,16 @@ public class TokenHandler : MonoBehaviour {
 		}
 
 		// If the target is ahead, keep progressing to the next step.
-		if (destPoint > nextStep)
-		{
+		if (destPoint > nextStep) {
 			nextStep = (nextStep + 1) % pathSteps.Count;
-		}
-		else if (destPoint == nextStep)
-		{
+		} else if (destPoint == nextStep) {
 			// We've reached our destination
-			if (IsOnSafeSpace() && isMoving)
-			{
+			if (IsOnSafeSpace() && isMoving) {
 				// and it's still our turn
 				isMoving = false; // Move is over
 				gameController.hasRolled = false; // Prevent the user from re-using the same roll
 				gameController.AddStatus("This token is at its destination and its turn is continuing. (Safe space)");
-			}
-			else if(isMoving == true)
-			{
+			} else if (isMoving == true) {
 				// and it's the other player's turn
 				gameController.AddStatus("This token is at its destination and its turn is over");
 				isMoving = false;
@@ -285,7 +241,7 @@ public class TokenHandler : MonoBehaviour {
 		float bias = (min + max) / 2;
 		float depth = (max - min) / 2;
 		return new Color(depth * Mathf.Sin(2 * Mathf.PI * Time.time / period) + bias,
-			depth * Mathf.Sin(2*Mathf.PI* Time.time/period)+bias,
+			depth * Mathf.Sin(2 * Mathf.PI * Time.time / period) + bias,
 			depth * Mathf.Sin(2 * Mathf.PI * Time.time / period) + bias);
-	} 
+	}
 }
