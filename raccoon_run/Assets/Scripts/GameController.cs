@@ -69,7 +69,7 @@ public class GameController : MonoBehaviour {
 		{
 			ph = GameObject.Find("Pathway_Player1");
 		}
-		return ph.GetComponent<PathwayHandler>().GetVacancy(spotIndex);
+		return ph.GetComponent<PathwayHandler>().GetOccupancy(spotIndex);
 	}
 
 	public void SetControl(int playerToActivate)

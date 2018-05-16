@@ -11,7 +11,6 @@ public class TokenHandler : MonoBehaviour {
 	public GameObject activationIndicator;
 	public bool winner = false;
 	public float stoppingDistance = 0.5f;
-	public int[] safeSpaces;
 
 	public int targetBoardSpace = 0; // the current destination of the token
 	private int nextStep = 0; // the next step toward targetBoardSpace
@@ -95,7 +94,7 @@ public class TokenHandler : MonoBehaviour {
 	}
 
 	void ClaimSpaceOnBoard(int space) {
-		pathwayHandler.SetVacancy(space);
+		pathwayHandler.SetOccupancy(space, this.GetComponent<GameObject>());
 	}
 
 	public void ActivateClickableObject(Vector3 point) {
@@ -120,18 +119,19 @@ public class TokenHandler : MonoBehaviour {
 		// Check if another piece occupies that space
 		GameObject clickedObject = GetClosestGameObject(tokenObjects, point, 0.6f);
 		// Check if the space diceRoll spaces ahead contains a Token
-		GameObject occupantObject = GetClosestGameObject(tokenObjects, pathSteps[nextBoardSpace].transform.position, 0.6f);
+		GameObject occupantObject = pathwayHandler.GetOccupancy(nextBoardSpace);
 
 		if(clickedObject && clickedObject.GetComponent<TokenHandler>().playerNumber == this.playerNumber) {
 			// This is our token, we can click it
 			// Check the space diceRoll number of spaces ahead
 			// if it is vacant, move there. Else, show a message.
-			if(pathwayHandler.GetVacancy(nextBoardSpace)) {
+			if(occupantObject == null) {
 				// We can move there, so move there!
 				pathwayHandler.LeaveSpot(nextStep);
 				targetBoardSpace = nextBoardSpace;
+				isMoving = true;
 				pathwayHandler.LeaveSpot(nextStep);
-				pathwayHandler.SetVacancy(targetBoardSpace);
+				pathwayHandler.SetOccupancy(targetBoardSpace, gameObject);
 				gameController.AddStatus("Player " + playerNumber + " moved ahead " + diceRoll + " spaces.");
 			} else {
 				// If the spot isn't vacant, we might still be able to
@@ -139,21 +139,25 @@ public class TokenHandler : MonoBehaviour {
 				// and it's not on a safe space.
 				if (occupantObject && occupantObject.GetComponent<TokenHandler>().playerNumber == playerNumber) {
 					// We can not move there! Show a message.
+					isMoving = false;
 					gameController.AddStatus("Player " + playerNumber + "'s move is blocked by their own token.");
 				} else if (occupantObject) {
 					if (occupantObject.GetComponent<TokenHandler>().IsOnSafeSpace()) {
 						// We can not move there! Show a message.
+						isMoving = false;
 						gameController.AddStatus("Player " + playerNumber + "'s move is blocked by an opponent's safe token.");
 					} else {
 						// Opponent is not on a safe space, move there!
 						gameController.AddStatus("Opponent is not safe! They are knocked back to the start.");
 						clickedObject.GetComponent<TokenHandler>().KnockBack();
+						isMoving = true;
 						pathwayHandler.LeaveSpot(nextStep);
-						pathwayHandler.SetVacancy(targetBoardSpace);
+						pathwayHandler.SetOccupancy(targetBoardSpace, gameObject);
 						targetBoardSpace = nextBoardSpace;
 					}
+				} else {
+					gameController.AddStatus("This should be quite impossible!");
 				}
-				
 			}
 		} else {
 			gameController.AddStatus("That's not your piece, Player " + playerNumber + "!");
@@ -162,7 +166,8 @@ public class TokenHandler : MonoBehaviour {
 
 	bool IsOnSafeSpace() {
 		bool status = false;
-		foreach (int safeSpace in safeSpaces) {
+
+		foreach (int safeSpace in pathwayHandler.safeSpaces) {
 			if (targetBoardSpace == safeSpace) status = true;
 		}
 
@@ -176,6 +181,7 @@ public class TokenHandler : MonoBehaviour {
 		transform.position = pathSteps[nextStep].position;
 		navMeshAgent.isStopped = true;
 		isSelected = false;
+		gameController.AddStatus("Token " + this.name + " was knocked back!");
 	}
 
 	GameObject GetClosestGameObject(GameObject[] otherTransforms, Vector3 point, float maxDistance) {
@@ -230,10 +236,7 @@ public class TokenHandler : MonoBehaviour {
 
 		// If the target is before the current step, 
 		// or it's the end, set it to the winning circle
-		if (!winner && (targetBoardSpace < nextStep || nextStep >= pathSteps.Count - 2)) {
-			//navMeshAgent.isStopped = true;
-			//transform.position = pathSteps[pathSteps.Count - 1].position;
-			//transform.rotation = pathSteps[pathSteps.Count - 1].rotation;
+		if (!winner && nextStep >= pathSteps.Count - 2) {
 			targetBoardSpace = pathSteps.Count - 1;
 			isSelected = false;
 			winner = true;

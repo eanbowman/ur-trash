@@ -40,7 +40,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4610312633630850}
   - component: {fileID: 33418993299254320}
-  - component: {fileID: 65111956340698406}
   - component: {fileID: 23772664040450274}
   m_Layer: 0
   m_Name: ActivationIndicator
@@ -154,18 +153,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1481415946082494}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &65111956340698406
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1670316903691206}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114221369645665530
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -185,8 +172,7 @@ MonoBehaviour:
   activationIndicator: {fileID: 1670316903691206}
   winner: 0
   stoppingDistance: 0.5
-  safeSpaces: 09000000050000000f000000
-  destPoint: 0
+  targetBoardSpace: 0
 --- !u!136 &136838892848505150
 CapsuleCollider:
   m_ObjectHideFlags: 1

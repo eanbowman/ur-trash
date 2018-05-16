@@ -4,31 +4,51 @@ using UnityEngine;
 
 public class PathwayHandler : MonoBehaviour {
 	public List<Transform> stops;
-	public bool[] vacancy;
+	public List<int> safeSpaces;
+	public List<int> sharedSpaces;
+
+	public GameObject[] occupancy;
 
 	void Start()
 	{
-		vacancy = new bool[stops.Count];
+		occupancy = new GameObject[stops.Count];
 		for(int i = 0; i < stops.Count; i++)
 		{
-			vacancy[i] = true; // it's vacant
+			occupancy[i] = null; // it's vacant
 		}
 	}
 
-	public bool GetVacancy(int spot)
+	public GameObject GetOccupancy(int spot)
 	{
-		if (spot < vacancy.Length)
+		if (spot < occupancy.Length)
 		{
-			return vacancy[spot];
+			return occupancy[spot];
 		}
-		return false;
+		throw new System.Exception("Invalid occupancy slot selected!");
 	}
 
-	public bool SetVacancy(int spot)
+	public bool SetOccupancy(int spot, GameObject token)
 	{
-		if (spot < vacancy.Length && vacancy[spot] == true)
+		bool sharedSpace = false;
+		foreach(int space in sharedSpaces) {
+			if(spot == space) {
+				sharedSpace = true;
+			}
+		}
+
+		// If this is our own space, set our own occupancy value
+		if (spot < occupancy.Length && occupancy[spot] == null && sharedSpace)
 		{
-			vacancy[spot] = false;
+			occupancy[spot] = token;
+			GameObject[] pathways = GameObject.FindGameObjectsWithTag("Pathway");
+			foreach(GameObject path in pathways) {
+				if(path.GetComponent<PathwayHandler>().GetOccupancy(spot) == null) {
+					path.GetComponent<PathwayHandler>().SetOccupancy(spot, token);
+				}
+			}
+			return true;
+		} else if (spot < occupancy.Length && occupancy[spot] == null) {
+			occupancy[spot] = token;
 			return true;
 		}
 		return false;
@@ -36,6 +56,6 @@ public class PathwayHandler : MonoBehaviour {
 
 	public void LeaveSpot(int spot)
 	{
-		if(spot < vacancy.Length) vacancy[spot] = true;
+		if(spot < occupancy.Length) occupancy[spot] = null;
 	}
 }
