@@ -36,6 +36,15 @@ public class PathwayHandler : MonoBehaviour {
 			}
 		}
 
+		// Remove occupancy from other spots
+		for(int i = 0; i < occupancy.Length; i++)
+		{
+			if(occupancy[i] == token)
+			{
+				occupancy[i] = null;
+			}
+		}
+
 		// If this is our own space, set our own occupancy value
 		if (spot < occupancy.Length && occupancy[spot] == null && sharedSpace)
 		{

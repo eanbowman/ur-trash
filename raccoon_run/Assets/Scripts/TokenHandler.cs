@@ -65,13 +65,6 @@ public class TokenHandler : MonoBehaviour {
 				CheckCurrentTarget();
 
 			activationIndicator.SetActive(true);
-			if (Input.GetMouseButtonDown(0)) {
-				RaycastHit hit;
-
-				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100)) {
-					ActivateClickableObject(hit.point);
-				}
-			}
 		} else {
 			activationIndicator.SetActive(false);
 		}
@@ -109,7 +102,12 @@ public class TokenHandler : MonoBehaviour {
 		// Exclude the winner's circle, and check that the nextBoardSpace
 		// is inside of the movable spaces on the board. Player can not
 		// move a token a partial roll ahead.
-		if (nextBoardSpace > pathSteps.Count - 1) {
+		// Extra spaces (3):
+		//	start space (0)
+		//	end space (15)
+		//	winner's circle (16)
+		// Last valid space is 15.
+		if (nextBoardSpace > pathSteps.Count - 2) {
 			gameController.AddStatus("Token does not have that many spaces left to move. Can not move a partial roll ahead.");
 			return;
 		}
@@ -127,6 +125,7 @@ public class TokenHandler : MonoBehaviour {
 			// if it is vacant, move there. Else, show a message.
 			if(occupantObject == null) {
 				// We can move there, so move there!
+				navMeshAgent.isStopped = false;
 				pathwayHandler.LeaveSpot(nextStep);
 				targetBoardSpace = nextBoardSpace;
 				isMoving = true;
@@ -148,8 +147,9 @@ public class TokenHandler : MonoBehaviour {
 						gameController.AddStatus("Player " + playerNumber + "'s move is blocked by an opponent's safe token.");
 					} else {
 						// Opponent is not on a safe space, move there!
+						navMeshAgent.isStopped = false;
 						gameController.AddStatus("Opponent is not safe! They are knocked back to the start.");
-						clickedObject.GetComponent<TokenHandler>().KnockBack();
+						occupantObject.GetComponent<TokenHandler>().KnockBack();
 						isMoving = true;
 						pathwayHandler.LeaveSpot(nextStep);
 						pathwayHandler.SetOccupancy(targetBoardSpace, gameObject);
@@ -162,6 +162,46 @@ public class TokenHandler : MonoBehaviour {
 		} else {
 			gameController.AddStatus("That's not your piece, Player " + playerNumber + "!");
 		}
+	}
+
+	public bool HasAValidMove(int roll)
+	{
+		int nextBoardSpace = targetBoardSpace + roll;
+
+		// Exclude the winner's circle, and check that the nextBoardSpace
+		// is inside of the movable spaces on the board. Player can not
+		// move a token a partial roll ahead.
+		// Extra spaces (3):
+		//	start space (0)
+		//	end space (15)
+		//	winner's circle (16)
+		// Last valid space is 15.
+		if (nextBoardSpace > pathSteps.Count - 2)
+		{
+			return false;
+		}
+
+		// Check if the space diceRoll spaces ahead contains a Token
+		GameObject occupantObject = pathwayHandler.GetOccupancy(nextBoardSpace);
+
+		// If the spot is empty, that's a valid move
+		if (occupantObject == null)
+		{
+			return true;
+		} else
+		{
+			if(occupantObject.GetComponent<TokenHandler>().playerNumber != playerNumber)
+			{
+				// If the target space is occupied by the other player...
+				if(occupantObject.GetComponent<TokenHandler>().IsOnSafeSpace() == false)
+				{
+					// and they're not on a safe space, it's a valid move.
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	bool IsOnSafeSpace() {

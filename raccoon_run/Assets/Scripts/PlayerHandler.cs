@@ -11,6 +11,7 @@ public class PlayerHandler : MonoBehaviour {
 	public int playerNumber;
 
 	private GameController gameController;
+	private bool hasCheckedForValidMoves = false;
 
 	// Use this for initialization
 	void Start () {
@@ -31,8 +32,18 @@ public class PlayerHandler : MonoBehaviour {
 			// If player has control, highlight all pieces
 			HighlightAllTokens();
 
+			// If the player has rolled, check if there are any valid moves
+			// if not, show a dialog and change control to the other
+			// player
+			if (gameController.hasRolled && !hasCheckedForValidMoves)
+			{
+				CheckForValidMoves();
+				hasCheckedForValidMoves = true;
+			}
+
 			if (Input.GetMouseButtonDown(0))
 			{
+				hasCheckedForValidMoves = false;
 				RaycastHit hit;
 				if (gameController.hasRolled)
 				{
@@ -59,6 +70,16 @@ public class PlayerHandler : MonoBehaviour {
 			}
 		} else {
 			DeselectAllTokens();
+		}
+	}
+
+	private void CheckForValidMoves()
+	{
+		bool validMoveExists = false; // start out negative
+		// Cycle through each token and see if it can move diceRoll spaces ahead
+		foreach(Transform token in tokens)
+		{
+			if (token.GetComponent<TokenHandler>().HasAValidMove(gameController.diceValue)) validMoveExists = true;
 		}
 	}
 

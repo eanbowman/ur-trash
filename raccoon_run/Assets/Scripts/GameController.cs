@@ -26,6 +26,10 @@ public class GameController : MonoBehaviour {
 
 	public void RollDice()
 	{
+		// Only let the current player roll the dice once
+		if (hasRolled) return;
+
+		// Roll the die
 		GameObject[] dice = GameObject.FindGameObjectsWithTag("DiceButton");
 		hasRolled = true;
 		diceValue = Random.Range(minRoll, maxRoll + 1);
