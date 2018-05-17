@@ -46,7 +46,8 @@ public class PathwayHandler : MonoBehaviour {
 		}
 
 		// If this is our own space, set our own occupancy value
-		if (spot < occupancy.Length && occupancy[spot] == null && sharedSpace)
+		// Don't count the end spot or the winner's circle
+		if (spot < occupancy.Length - 2 && occupancy[spot] == null && sharedSpace)
 		{
 			occupancy[spot] = token;
 			GameObject[] pathways = GameObject.FindGameObjectsWithTag("Pathway");

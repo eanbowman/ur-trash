@@ -87,7 +87,11 @@ public class TokenHandler : MonoBehaviour {
 	}
 
 	void ClaimSpaceOnBoard(int space) {
-		pathwayHandler.SetOccupancy(space, this.GetComponent<GameObject>());
+		GameObject[] pathwayHandlers = GameObject.FindGameObjectsWithTag("Pathway");
+		foreach (GameObject path in pathwayHandlers)
+		{
+			path.GetComponent<PathwayHandler>().SetOccupancy(space, this.GetComponent<GameObject>());
+		}
 	}
 
 	public void ActivateClickableObject(Vector3 point) {

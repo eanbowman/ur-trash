@@ -37,7 +37,11 @@ public class PlayerHandler : MonoBehaviour {
 			// player
 			if (gameController.hasRolled && !hasCheckedForValidMoves)
 			{
-				CheckForValidMoves();
+				if (CheckForValidMoves() == false)
+				{
+					gameController.ChangeControl();
+					gameController.AddStatus("NO VALID MOVES!!! CUTIES ARE PRESENT!");
+				}
 				hasCheckedForValidMoves = true;
 			}
 
@@ -73,7 +77,7 @@ public class PlayerHandler : MonoBehaviour {
 		}
 	}
 
-	private void CheckForValidMoves()
+	private bool CheckForValidMoves()
 	{
 		bool validMoveExists = false; // start out negative
 		// Cycle through each token and see if it can move diceRoll spaces ahead
@@ -81,6 +85,7 @@ public class PlayerHandler : MonoBehaviour {
 		{
 			if (token.GetComponent<TokenHandler>().HasAValidMove(gameController.diceValue)) validMoveExists = true;
 		}
+		return validMoveExists;
 	}
 
 	private void SetSelected(GameObject target) {
