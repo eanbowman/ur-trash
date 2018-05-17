@@ -32,7 +32,14 @@ public class GameController : MonoBehaviour {
 		// Roll the die
 		GameObject[] dice = GameObject.FindGameObjectsWithTag("DiceButton");
 		hasRolled = true;
-		diceValue = Random.Range(minRoll, maxRoll + 1);
+
+		// Roll 4d1 with a zero side
+		diceValue = 0;
+		for(int i = 0; i < 4; i++)
+		{
+			diceValue += Random.Range(0, 1);
+		}
+		
 		if (diceValue > maxRoll || diceValue < minRoll) RollDice();
 		this.AddStatus("Player " + (playerNumber + 1) + " has rolled a " + diceValue);
 		if (diceValue == 0) ChangeControl();
