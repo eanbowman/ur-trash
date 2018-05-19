@@ -125,20 +125,26 @@ public class TokenHandler : MonoBehaviour {
 
 		if(HasAValidMove(diceRoll))
 		{
-			// We can move there, so move there!
-			navMeshAgent.isStopped = false;
-			pathwayHandler.LeaveSpot(nextStep);
-			targetBoardSpace = nextBoardSpace;
-			isMoving = true;
-			pathwayHandler.LeaveSpot(nextStep);
-			pathwayHandler.SetOccupancy(targetBoardSpace, gameObject);
-			gameController.AddStatus("Player " + playerNumber + " moved ahead " + diceRoll + " spaces.");
-			if (occupantObject && occupantObject.GetComponent<TokenHandler>().playerNumber != playerNumber)
+			if (IsAValidMove(diceRoll))
 			{
-				occupantObject.GetComponent<TokenHandler>().KnockBack();
-				gameController.AddStatus("Player " + occupantObject.GetComponent<TokenHandler>().playerNumber + " was knocked back.");
+				// We can move there, so move there!
+				navMeshAgent.isStopped = false;
+				pathwayHandler.LeaveSpot(nextStep);
+				targetBoardSpace = nextBoardSpace;
+				isMoving = true;
+				pathwayHandler.LeaveSpot(nextStep);
+				pathwayHandler.SetOccupancy(targetBoardSpace, gameObject);
+				gameController.AddStatus("Player " + playerNumber + " moved ahead " + diceRoll + " spaces.");
+				if (occupantObject && occupantObject.GetComponent<TokenHandler>().playerNumber != playerNumber)
+				{
+					occupantObject.GetComponent<TokenHandler>().KnockBack();
+					gameController.AddStatus("Player " + occupantObject.GetComponent<TokenHandler>().playerNumber + " was knocked back.");
+				}
+				return;
+			} else
+			{
+				gameController.AddStatus("That is not a valid move, but you have other valid moves!");
 			}
-			return;
 		} else
 		{
 			gameController.ChangeControl();
@@ -193,6 +199,17 @@ public class TokenHandler : MonoBehaviour {
 	}
 
 	public bool HasAValidMove(int roll)
+	{
+		GameObject player = GameObject.Find("Player " + playerNumber + " Tokens");
+		bool hasAValidMove = false;
+		foreach(Transform token in player.GetComponent<PlayerHandler>().tokens)
+		{
+			if (token.GetComponent<TokenHandler>().IsAValidMove(roll)) hasAValidMove = true;
+		}
+		return hasAValidMove;
+	}
+
+	public bool IsAValidMove(int roll)
 	{
 		int nextBoardSpace = targetBoardSpace + roll;
 
