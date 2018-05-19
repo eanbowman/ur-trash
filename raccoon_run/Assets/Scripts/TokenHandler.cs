@@ -214,9 +214,9 @@ public class TokenHandler : MonoBehaviour {
 
 	// Reset this token to the start
 	public void KnockBack() {
-		targetBoardSpace = 0;
-		pathwayHandler.LeaveSpot(this.GetComponent<GameObject>());
-		nextStep = 0;
+		targetBoardSpace = 1;
+		pathwayHandler.LeaveSpot(this.gameObject);
+		nextStep = 1;
 		transform.position = pathSteps[nextStep].position;
 		navMeshAgent.isStopped = true;
 		isSelected = false;
