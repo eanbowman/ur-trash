@@ -123,7 +123,30 @@ public class TokenHandler : MonoBehaviour {
 		// Check if the space diceRoll spaces ahead contains a Token
 		GameObject occupantObject = pathwayHandler.GetOccupancy(nextBoardSpace);
 
-		if(clickedObject && clickedObject.GetComponent<TokenHandler>().playerNumber == this.playerNumber) {
+		if(HasAValidMove(diceRoll))
+		{
+			// We can move there, so move there!
+			navMeshAgent.isStopped = false;
+			pathwayHandler.LeaveSpot(nextStep);
+			targetBoardSpace = nextBoardSpace;
+			isMoving = true;
+			pathwayHandler.LeaveSpot(nextStep);
+			pathwayHandler.SetOccupancy(targetBoardSpace, gameObject);
+			gameController.AddStatus("Player " + playerNumber + " moved ahead " + diceRoll + " spaces.");
+			if (occupantObject && occupantObject.GetComponent<TokenHandler>().playerNumber != playerNumber)
+			{
+				occupantObject.GetComponent<TokenHandler>().KnockBack();
+				gameController.AddStatus("Player " + occupantObject.GetComponent<TokenHandler>().playerNumber + " was knocked back.");
+			}
+			return;
+		} else
+		{
+			gameController.ChangeControl();
+			gameController.AddStatus("Player " + playerNumber + " has no valid moves for " + diceRoll + " spaces.");
+		}
+
+		/*
+		if (clickedObject && clickedObject.GetComponent<TokenHandler>().playerNumber == this.playerNumber) {
 			// This is our token, we can click it
 			// Check the space diceRoll number of spaces ahead
 			// if it is vacant, move there. Else, show a message.
@@ -166,6 +189,7 @@ public class TokenHandler : MonoBehaviour {
 		} else {
 			gameController.AddStatus("That's not your piece, Player " + playerNumber + "!");
 		}
+		*/
 	}
 
 	public bool HasAValidMove(int roll)
