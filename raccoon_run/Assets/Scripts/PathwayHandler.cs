@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PathwayHandler : MonoBehaviour {
+	public int playerNumber;
 	public List<Transform> stops;
 	public List<int> safeSpaces;
 	public List<int> sharedSpaces;
@@ -69,12 +70,17 @@ public class PathwayHandler : MonoBehaviour {
 		for(int i = 0; i < stops.Count; i++) {
 			if (stops[i].GetComponent<GameObject>() == token) stops[i] = null;
 		}
-		// Update other player's path list too in case it contains a reference to this token
-		// No more ghost tokens! boo!
-		int otherPlayerNumber = 1;
-		if(token.GetComponent<TokenHandler>().playerNumber == 1) { otherPlayerNumber = 2; }
-		GameObject player = GameObject.Find("Player " + otherPlayerNumber + " Tokens");
-		// this convoluted mess finds the other player's first token's pathway handler and calls its copy of LeaveSpot
-		player.GetComponent<PlayerHandler>().tokens[0].GetComponent<TokenHandler>().pathwayHandler.LeaveSpot(token);
+		// If this time we are looking at token that is the player's own, run this additional check
+		// otherwise don't, or we'll blow the stack up with infinite checks :D
+		if (token.GetComponent<TokenHandler>().playerNumber == playerNumber)
+		{
+			// Update other player's path list too in case it contains a reference to this token
+			// No more ghost tokens! boo!
+			int otherPlayerNumber = 1;
+			if (token.GetComponent<TokenHandler>().playerNumber == 1) { otherPlayerNumber = 2; }
+			GameObject player = GameObject.Find("Player " + otherPlayerNumber + " Tokens");
+			// this convoluted mess finds the other player's first token's pathway handler and calls its copy of LeaveSpot
+			player.GetComponent<PlayerHandler>().tokens[0].GetComponent<TokenHandler>().pathwayHandler.LeaveSpot(token);
+		}
 	}
 }

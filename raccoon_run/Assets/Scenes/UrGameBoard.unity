@@ -749,6 +749,11 @@ Prefab:
       propertyPath: m_TagString
       value: Pathway
       objectReference: {fileID: 0}
+    - target: {fileID: 114816909823451950, guid: c7ccc52e5d2bf154d85667e8bcecd6f0,
+        type: 2}
+      propertyPath: playerNumber
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c7ccc52e5d2bf154d85667e8bcecd6f0, type: 2}
   m_IsPrefabParent: 0
@@ -1336,6 +1341,11 @@ Prefab:
     - target: {fileID: 1071215350820414, guid: 6fb230d7f2710344c9587f45fe4b1873, type: 2}
       propertyPath: m_TagString
       value: Pathway
+      objectReference: {fileID: 0}
+    - target: {fileID: 114038759113475422, guid: 6fb230d7f2710344c9587f45fe4b1873,
+        type: 2}
+      propertyPath: playerNumber
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6fb230d7f2710344c9587f45fe4b1873, type: 2}
