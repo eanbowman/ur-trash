@@ -64,8 +64,17 @@ public class PathwayHandler : MonoBehaviour {
 		return false;
 	}
 
-	public void LeaveSpot(int spot)
+	public void LeaveSpot(GameObject token)
 	{
-		if(spot < occupancy.Length) occupancy[spot] = null;
+		for(int i = 0; i < stops.Count; i++) {
+			if (stops[i].GetComponent<GameObject>() == token) stops[i] = null;
+		}
+		// Update other player's path list too in case it contains a reference to this token
+		// No more ghost tokens! boo!
+		int otherPlayerNumber = 1;
+		if(token.GetComponent<TokenHandler>().playerNumber == 1) { otherPlayerNumber = 2; }
+		GameObject player = GameObject.Find("Player " + otherPlayerNumber + " Tokens");
+		// this convoluted mess finds the other player's first token's pathway handler and calls its copy of LeaveSpot
+		player.GetComponent<PlayerHandler>().tokens[0].GetComponent<TokenHandler>().pathwayHandler.LeaveSpot(token);
 	}
 }

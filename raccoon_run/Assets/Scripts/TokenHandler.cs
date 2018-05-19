@@ -11,6 +11,7 @@ public class TokenHandler : MonoBehaviour {
 	public GameObject activationIndicator;
 	public bool winner = false;
 	public float stoppingDistance = 0.5f;
+	public PathwayHandler pathwayHandler;
 
 	public int targetBoardSpace = 0; // the current destination of the token
 	private int nextStep = 0; // the next step toward targetBoardSpace
@@ -18,7 +19,6 @@ public class TokenHandler : MonoBehaviour {
 	private GameController gameController;
 	private bool isMoving = false;
 	private Material m_Material;
-	private PathwayHandler pathwayHandler;
 
 	// Use this for initialization
 	void Start() {
@@ -129,10 +129,9 @@ public class TokenHandler : MonoBehaviour {
 			{
 				// We can move there, so move there!
 				navMeshAgent.isStopped = false;
-				pathwayHandler.LeaveSpot(nextStep);
+				pathwayHandler.LeaveSpot(this.gameObject);
 				targetBoardSpace = nextBoardSpace;
 				isMoving = true;
-				pathwayHandler.LeaveSpot(nextStep);
 				pathwayHandler.SetOccupancy(targetBoardSpace, gameObject);
 				gameController.AddStatus("Player " + playerNumber + " moved ahead " + diceRoll + " spaces.");
 				if (occupantObject && occupantObject.GetComponent<TokenHandler>().playerNumber != playerNumber)
@@ -150,52 +149,6 @@ public class TokenHandler : MonoBehaviour {
 			gameController.ChangeControl();
 			gameController.AddStatus("Player " + playerNumber + " has no valid moves for " + diceRoll + " spaces.");
 		}
-
-		/*
-		if (clickedObject && clickedObject.GetComponent<TokenHandler>().playerNumber == this.playerNumber) {
-			// This is our token, we can click it
-			// Check the space diceRoll number of spaces ahead
-			// if it is vacant, move there. Else, show a message.
-			if(occupantObject == null) {
-				// We can move there, so move there!
-				navMeshAgent.isStopped = false;
-				pathwayHandler.LeaveSpot(nextStep);
-				targetBoardSpace = nextBoardSpace;
-				isMoving = true;
-				pathwayHandler.LeaveSpot(nextStep);
-				pathwayHandler.SetOccupancy(targetBoardSpace, gameObject);
-				gameController.AddStatus("Player " + playerNumber + " moved ahead " + diceRoll + " spaces.");
-			} else {
-				// If the spot isn't vacant, we might still be able to
-				// knock the other token off, if it's the other player's
-				// and it's not on a safe space.
-				if (occupantObject && occupantObject.GetComponent<TokenHandler>().playerNumber == playerNumber) {
-					// We can not move there! Show a message.
-					isMoving = false;
-					gameController.AddStatus("Player " + playerNumber + "'s move is blocked by their own token.");
-				} else if (occupantObject) {
-					if (occupantObject.GetComponent<TokenHandler>().IsOnSafeSpace()) {
-						// We can not move there! Show a message.
-						isMoving = false;
-						gameController.AddStatus("Player " + playerNumber + "'s move is blocked by an opponent's safe token.");
-					} else {
-						// Opponent is not on a safe space, move there!
-						navMeshAgent.isStopped = false;
-						gameController.AddStatus("Opponent is not safe! They are knocked back to the start.");
-						occupantObject.GetComponent<TokenHandler>().KnockBack();
-						isMoving = true;
-						pathwayHandler.LeaveSpot(nextStep);
-						pathwayHandler.SetOccupancy(targetBoardSpace, gameObject);
-						targetBoardSpace = nextBoardSpace;
-					}
-				} else {
-					gameController.AddStatus("This should be quite impossible!");
-				}
-			}
-		} else {
-			gameController.AddStatus("That's not your piece, Player " + playerNumber + "!");
-		}
-		*/
 	}
 
 	public bool HasAValidMove(int roll)
