@@ -37,7 +37,8 @@ public class GameController : MonoBehaviour {
 		diceValue = 0;
 		for(int i = 0; i < 4; i++)
 		{
-			diceValue += Random.Range(0, 1);
+			float die = Random.Range(0, 100);
+			if (die > 50) diceValue++;
 		}
 		
 		if (diceValue > maxRoll || diceValue < minRoll) RollDice();
