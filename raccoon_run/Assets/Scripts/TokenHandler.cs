@@ -129,7 +129,7 @@ public class TokenHandler : MonoBehaviour {
 			{
 				// We can move there, so move there!
 				navMeshAgent.isStopped = false;
-				pathwayHandler.LeaveSpot(this.gameObject);
+				pathwayHandler.LeaveSpot(this.gameObject, false);
 				targetBoardSpace = nextBoardSpace;
 				isMoving = true;
 				pathwayHandler.SetOccupancy(targetBoardSpace, gameObject);
@@ -194,6 +194,7 @@ public class TokenHandler : MonoBehaviour {
 				if(occupantObject.GetComponent<TokenHandler>().IsOnSafeSpace() == false)
 				{
 					// and they're not on a safe space, it's a valid move.
+					gameController.AddStatus("Other player is not on a safe space!");
 					return true;
 				}
 			}
@@ -214,11 +215,11 @@ public class TokenHandler : MonoBehaviour {
 
 	// Reset this token to the start
 	public void KnockBack() {
-		targetBoardSpace = 1;
-		pathwayHandler.LeaveSpot(this.gameObject);
-		nextStep = 1;
+		pathwayHandler.LeaveSpot(this.gameObject, false);
+		nextStep = 0;
+		targetBoardSpace = 0;
 		transform.position = pathSteps[nextStep].position;
-		navMeshAgent.isStopped = true;
+		navMeshAgent.destination = pathSteps[nextStep].position;
 		isSelected = false;
 		gameController.AddStatus("Token " + this.name + " was knocked back!");
 	}
