@@ -129,10 +129,10 @@ public class TokenHandler : MonoBehaviour {
 			{
 				// We can move there, so move there!
 				navMeshAgent.isStopped = false;
-				pathwayHandler.LeaveSpot(this.gameObject, false);
+				pathwayHandler.LeaveSpot(this.gameObject);
 				targetBoardSpace = nextBoardSpace;
 				isMoving = true;
-				pathwayHandler.SetOccupancy(targetBoardSpace, gameObject);
+				pathwayHandler.SetOccupancy(targetBoardSpace, this.gameObject);
 				gameController.AddStatus("Player " + playerNumber + " moved ahead " + diceRoll + " spaces.");
 				if (occupantObject && occupantObject.GetComponent<TokenHandler>().playerNumber != playerNumber)
 				{
@@ -215,7 +215,7 @@ public class TokenHandler : MonoBehaviour {
 
 	// Reset this token to the start
 	public void KnockBack() {
-		pathwayHandler.LeaveSpot(this.gameObject, false);
+		pathwayHandler.LeaveSpot(this.gameObject);
 		nextStep = 0;
 		targetBoardSpace = 0;
 		transform.position = pathSteps[nextStep].position;

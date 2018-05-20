@@ -34,6 +34,7 @@ public class PathwayHandler : MonoBehaviour {
 		foreach(int space in sharedSpaces) {
 			if(spot == space) {
 				sharedSpace = true;
+				Debug.Log("Shared space");
 			}
 		}
 
@@ -65,27 +66,28 @@ public class PathwayHandler : MonoBehaviour {
 		return false;
 	}
 
-	public void LeaveSpot(GameObject token, bool checkedOtherPlayer)
+	public void LeaveSpot(GameObject token)
 	{
 		Debug.Log("Checking all tokens for this player to make " + token.name + " leave all spaces");
-		for(int i = 0; i < stops.Count; i++) {
-			if (stops[i].GetComponent<GameObject>() == token)
+		for(int i = 0; i < occupancy.Length; i++) {
+			if (occupancy[i] == token)
 			{
-				stops[i] = null;
+				occupancy[i] = null;
 			}
 		}
-		// If this time we are looking at token that is the player's own, run this additional check
-		// otherwise don't, or we'll blow the stack up with infinite checks :D
-		if (!checkedOtherPlayer)
-		{
-			Debug.Log("Checking all tokens for the other player to make " + token.name + " leave all spaces");
-			// Update other player's path list too in case it contains a reference to this token
-			// No more ghost tokens! boo!
-			int otherPlayerNumber = 1;
-			if (token.GetComponent<TokenHandler>().playerNumber == 1) { otherPlayerNumber = 2; }
-			GameObject player = GameObject.Find("Player " + otherPlayerNumber + " Tokens");
-			// this convoluted mess finds the other player's first token's pathway handler and calls its copy of LeaveSpot
-			player.GetComponent<PlayerHandler>().tokens[0].GetComponent<TokenHandler>().pathwayHandler.LeaveSpot(token, true);
+		UpdateSharedSpaces();
+	}
+
+	private void UpdateSharedSpaces()
+	{
+		GameObject[] pathways = GameObject.FindGameObjectsWithTag("Pathway");
+		for(int i = 0; i < pathways.Length; i++) {
+			foreach (int space in sharedSpaces) {
+				if (pathways[i].GetComponent<PathwayHandler>().playerNumber != playerNumber)
+				{
+					pathways[i].GetComponent<PathwayHandler>().occupancy[space] = occupancy[space];
+				}
+			}
 		}
 	}
 }
