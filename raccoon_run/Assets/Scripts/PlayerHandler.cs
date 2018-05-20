@@ -27,6 +27,11 @@ public class PlayerHandler : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
+		if( points == maxPoints )
+		{
+			gameController.AddStatus("Hot dog, we have a wiener!");
+			gameController.gameState = "Winner";
+		}
 		if (this.hasControl)
 		{
 			// If player has control, highlight all pieces

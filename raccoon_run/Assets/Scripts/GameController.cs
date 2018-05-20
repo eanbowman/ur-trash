@@ -28,6 +28,7 @@ public class GameController : MonoBehaviour {
 	{
 		// Only let the current player roll the dice once
 		if (hasRolled) return;
+		if (gameState == "Winner") return;
 
 		// Roll the die
 		GameObject[] dice = GameObject.FindGameObjectsWithTag("DiceButton");

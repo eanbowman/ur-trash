@@ -71,6 +71,7 @@ public class TokenHandler : MonoBehaviour {
 
 		// If this token has reached the end, move it to the winner's area
 		if (winner) {
+			pathwayHandler.LeaveSpot(this.gameObject);
 			// If we've reached the winner's area, stop navigation and celebrate!
 			if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < stoppingDistance) {
 				navMeshAgent.isStopped = true;
