@@ -127,6 +127,11 @@ public class TokenHandler : MonoBehaviour {
 		{
 			if (IsAValidMove(diceRoll))
 			{
+				if (occupantObject && occupantObject.GetComponent<TokenHandler>().playerNumber != playerNumber)
+				{
+					occupantObject.GetComponent<TokenHandler>().KnockBack();
+					gameController.AddStatus("Player " + occupantObject.GetComponent<TokenHandler>().playerNumber + " was knocked back.");
+				}
 				// We can move there, so move there!
 				navMeshAgent.isStopped = false;
 				pathwayHandler.LeaveSpot(this.gameObject);
@@ -134,11 +139,6 @@ public class TokenHandler : MonoBehaviour {
 				isMoving = true;
 				pathwayHandler.SetOccupancy(targetBoardSpace, this.gameObject);
 				gameController.AddStatus("Player " + playerNumber + " moved ahead " + diceRoll + " spaces.");
-				if (occupantObject && occupantObject.GetComponent<TokenHandler>().playerNumber != playerNumber)
-				{
-					occupantObject.GetComponent<TokenHandler>().KnockBack();
-					gameController.AddStatus("Player " + occupantObject.GetComponent<TokenHandler>().playerNumber + " was knocked back.");
-				}
 				return;
 			} else
 			{
