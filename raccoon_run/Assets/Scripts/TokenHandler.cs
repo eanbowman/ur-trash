@@ -138,7 +138,9 @@ public class TokenHandler : MonoBehaviour {
 				pathwayHandler.LeaveSpot(this.gameObject);
 				targetBoardSpace = nextBoardSpace;
 				isMoving = true;
-				pathwayHandler.SetOccupancy(targetBoardSpace, this.gameObject);
+				if (!pathwayHandler.SetOccupancy(targetBoardSpace, this.gameObject)) {
+					gameController.AddStatus("Failed to set occupancy!");
+				}
 				gameController.AddStatus("Player " + playerNumber + " moved ahead " + diceRoll + " spaces.");
 				return;
 			} else

@@ -20,8 +20,7 @@ public class BoardStatus : MonoBehaviour {
 	}
 
 	public bool AddToken(GameObject token, int index, int playerNumber) {
-		int space = 0;
-		space = GetGameBoardSpotIndex(index, playerNumber);
+		int space = GetGameBoardSpotIndex(index, playerNumber);
 		if (space < spaces.Length) {
 			// Ensure the user of this class clears out
 			// the space before trying to add a token
@@ -86,7 +85,7 @@ public class BoardStatus : MonoBehaviour {
 
 	public bool RemoveTokenByNameFromAllSpaces(string tokenName) {
 		for(int i = 0; i < tokens.Length; i++) {
-			if (tokens[i].name == tokenName) {
+			if (tokens[i] && tokens[i].name == tokenName) {
 				tokens[i] = null;
 				return true;
 			}

@@ -7,7 +7,6 @@ public class PathwayHandler : MonoBehaviour {
 	public List<Transform> stops;
 	public List<int> safeSpaces;
 	public List<int> sharedSpaces;
-	public GameObject[] occupancy;
 
 	private GameObject gameBoardObject;
 	private BoardStatus boardStatus;
