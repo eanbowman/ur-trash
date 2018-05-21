@@ -7,11 +7,13 @@ public class PathwayHandler : MonoBehaviour {
 	public List<Transform> stops;
 	public List<int> safeSpaces;
 	public List<int> sharedSpaces;
+	public GameObject gameBoard;
 
 	public GameObject[] occupancy;
 
 	void Start()
 	{
+		gameBoard = GameObject.FindGameObjectWithTag("GameBoard");
 		occupancy = new GameObject[stops.Count];
 		for(int i = 0; i < stops.Count; i++)
 		{

@@ -15,7 +15,7 @@ public class PlayerHandler : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		this.gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+		this.gameController = GameObject.FindGameObjectWithTag("GameBoard").GetComponent<GameController>();
 		foreach (Transform child in transform)
 		{
 			if (child.tag == "Token")

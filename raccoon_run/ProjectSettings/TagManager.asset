@@ -9,6 +9,7 @@ TagManager:
   - DialogueBox
   - DiceButton
   - Pathway
+  - GameBoard
   layers:
   - Default
   - TransparentFX

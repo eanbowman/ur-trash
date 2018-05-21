@@ -25,7 +25,7 @@ public class TokenHandler : MonoBehaviour {
 		isHighlighted = false;
 		m_Material = GetComponent<Renderer>().material;
 		navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
-		gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+		gameController = GameObject.FindGameObjectWithTag("GameBoard").GetComponent<GameController>();
 		GameObject pathObject = GameObject.Find("Pathway_Player" + playerNumber);
 		if (pathObject) {
 			pathwayHandler = pathObject.GetComponent<PathwayHandler>();
