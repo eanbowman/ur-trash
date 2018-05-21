@@ -5,7 +5,7 @@ using UnityEngine;
 public class DiceButtonHandler : MonoBehaviour {
 	public void RollTheDie()
 	{
-		GameObject gameController = GameObject.FindGameObjectsWithTag("GameController")[0];
+		GameObject gameController = GameObject.FindGameObjectsWithTag("GameBoard")[0];
 		gameController.GetComponent<GameController>().RollDice();
 	}
 }
