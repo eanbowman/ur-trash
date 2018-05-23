@@ -42,7 +42,9 @@ public class BoardStatus : MonoBehaviour {
 		spot--;
 		SpotName spotName = new SpotName();
 		if (playerNumber == 2) {
-			if (spot < 5) {
+			if (spot > 4 && spot < 12) {
+				return spot;
+			} else {
 				return spot + 14;
 			}
 		}
@@ -56,10 +58,10 @@ public class BoardStatus : MonoBehaviour {
 		spotName.text = "Token ";
 		// map the difference between the pathway index and the spot on the board
 		if (playerNumber == 2) {
-			if (spot < 5) {
-				spotName.text += (spot + 15) + " P2";
+			if (spot > 4 && spot < 12) {
+				spotName.text += spot +" P2";
 			} else {
-				spotName.text += spot + " P2";
+				spotName.text += (spot + 14) + " P2";
 			}
 		} else {
 			spotName.text += spot;
