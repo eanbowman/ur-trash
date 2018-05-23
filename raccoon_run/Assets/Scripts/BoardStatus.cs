@@ -21,12 +21,12 @@ public class BoardStatus : MonoBehaviour {
 
 	public bool AddToken(GameObject token, int index, int playerNumber) {
 		int space = GetGameBoardSpotIndex(index, playerNumber);
-		if (space < spaces.Length) {
+		if (space < tokens.Length) {
 			// Ensure the user of this class clears out
 			// the space before trying to add a token
 			// to it.
-			if (spaces[space] == null) {
-				spaces[space] = token;
+			if (tokens[space] == null) {
+				tokens[space] = token;
 				return true;
 			} else {
 				return false;
@@ -39,6 +39,7 @@ public class BoardStatus : MonoBehaviour {
 
 	/* Converts a spot integer into its space integer */
 	public int GetGameBoardSpotIndex(int spot, int playerNumber) {
+		spot--;
 		SpotName spotName = new SpotName();
 		if (playerNumber == 2) {
 			if (spot < 5) {
@@ -50,12 +51,13 @@ public class BoardStatus : MonoBehaviour {
 
 	/* Converts a spot integer into its GameObject name */
 	public SpotName GetGameBoardSpotName(int spot, int playerNumber) {
+		spot--;
 		SpotName spotName = new SpotName();
 		spotName.text = "Token ";
 		// map the difference between the pathway index and the spot on the board
 		if (playerNumber == 2) {
 			if (spot < 5) {
-				spotName.text += (spot + 14) + " P2";
+				spotName.text += (spot + 15) + " P2";
 			} else {
 				spotName.text += spot + " P2";
 			}
