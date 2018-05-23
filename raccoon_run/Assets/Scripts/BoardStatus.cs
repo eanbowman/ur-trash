@@ -43,8 +43,11 @@ public class BoardStatus : MonoBehaviour {
 		if (playerNumber == 2) {
 			if (spot > 3 && spot < 12) {
 				if(spot < tokens.Length) return spot;
-			} else {
+			} else if (spot > 0 && spot < 4) {
 				spot += 14;
+				if (spot < tokens.Length) return spot;
+			} else {
+				spot += 6;
 				if (spot < tokens.Length) return spot;
 			}
 		}
@@ -61,8 +64,10 @@ public class BoardStatus : MonoBehaviour {
 		if (playerNumber == 2) {
 			if (spot > 3 && spot < 12) {
 				spotName.text += spot +" P2";
-			} else {
+			} else if (spot > 0 && spot < 4) {
 				spotName.text += (spot + 14) + " P2";
+			} else {
+				spotName.text += (spot + 6) + " P2";
 			}
 		} else {
 			spotName.text += spot;
