@@ -40,6 +40,7 @@ public class BoardStatus : MonoBehaviour {
 	/* Converts a spot integer into its space integer */
 	public int GetGameBoardSpotIndex(int spot, int playerNumber) {
 		spot--;
+		Debug.Log(spot);
 		SpotName spotName = new SpotName();
 		if (playerNumber == 2) {
 			if (spot > 4 && spot < 12) {
