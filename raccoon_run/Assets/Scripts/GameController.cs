@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour {
 	public int playerNumber = 0;
 	public int diceValue = 0;
 	public bool hasRolled = false;
+	public int bufferSize = 100;
 
 	public int maxRoll = 4;
 	public int minRoll = 0;
@@ -104,6 +105,6 @@ public class GameController : MonoBehaviour {
 	{
 		this.status.text += text + "\n";
 		// Status buffer is 2000 characters long
-		if(this.status.text.Length > 2000) this.status.text = this.status.text.Substring(2000);
+		if(status.text.Length > bufferSize) status.text = status.text.Substring(status.text.Length - bufferSize);
 	}
 }
