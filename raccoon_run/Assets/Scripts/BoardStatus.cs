@@ -21,7 +21,7 @@ public class BoardStatus : MonoBehaviour {
 
 	public bool AddToken(GameObject token, int index, int playerNumber) {
 		int space = GetGameBoardSpotIndex(index, playerNumber);
-		if (space > 0 && space < tokens.Length) {
+		if (space >= 0 && space < tokens.Length) {
 			// Ensure the user of this class clears out
 			// the space before trying to add a token
 			// to it.
@@ -43,7 +43,7 @@ public class BoardStatus : MonoBehaviour {
 		if (playerNumber == 2) {
 			if (spot > 3 && spot < 12) {
 				if(spot < tokens.Length) return spot;
-			} else if (spot > 0 && spot < 4) {
+			} else if (spot >= 0 && spot < 4) {
 				spot += 14;
 				if (spot < tokens.Length) return spot;
 			} else {
