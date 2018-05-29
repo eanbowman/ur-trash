@@ -7,6 +7,8 @@ public class BoardStatus : MonoBehaviour {
 	public GameObject[] spaces;
 	public GameObject[] tokens;
 
+	public int playerOneMaxSpaceIndex = 14;
+
 	// Use this for initialization
 	void Start() {
 		// Initialize a new parallel array to hold tokens
@@ -39,19 +41,21 @@ public class BoardStatus : MonoBehaviour {
 	/* Converts a spot integer into its space integer */
 	public int GetGameBoardSpotIndex(int spot, int playerNumber) {
 		spot--;
-		SpotName spotName = new SpotName();
+
 		if (playerNumber == 2) {
 			if (spot > 3 && spot < 12) {
 				if(spot < tokens.Length) return spot;
 			} else if (spot >= 0 && spot < 4) {
-				spot += 14;
+				spot += playerOneMaxSpaceIndex;
 				if (spot < tokens.Length) return spot;
 			} else {
 				spot += 6;
 				if (spot < tokens.Length) return spot;
 			}
 		}
-		if (spot < tokens.Length) return spot;
+		// Only allow P1 to assign spaces to their own area of the array.
+		// (Player 2 home spots are stored after P1)
+		if (spot < playerOneMaxSpaceIndex && spot < tokens.Length) return spot;
 		return -1;
 	}
 
@@ -64,13 +68,15 @@ public class BoardStatus : MonoBehaviour {
 		if (playerNumber == 2) {
 			if (spot > 3 && spot < 12) {
 				spotName.text += spot +" P2";
-			} else if (spot > 0 && spot < 4) {
-				spotName.text += (spot + 14) + " P2";
+			} else if (spot >= 0 && spot < 4) {
+				spotName.text += (spot + playerOneMaxSpaceIndex) + " P2";
 			} else {
 				spotName.text += (spot + 6) + " P2";
 			}
-		} else {
+		} else if (spot < playerOneMaxSpaceIndex && spot < tokens.Length) {
 			spotName.text += spot;
+		} else {
+			spotName.text = "Invalid spot";
 		}
 
 		return spotName;

@@ -12,8 +12,9 @@ public class TokenHandler : MonoBehaviour {
 	public bool winner = false;
 	public float stoppingDistance = 0.5f;
 	public PathwayHandler pathwayHandler;
-
 	public int targetBoardSpace = 0; // the current destination of the token
+	public int validGameBoardSpaces = 14; // Total minus start, end, winning
+
 	private int nextStep = 0; // the next step toward targetBoardSpace
 	private bool hasStarted = false;
 	private GameController gameController;
@@ -138,7 +139,9 @@ public class TokenHandler : MonoBehaviour {
 				pathwayHandler.LeaveSpot(this.gameObject);
 				targetBoardSpace = nextBoardSpace;
 				isMoving = true;
-				if (!pathwayHandler.SetOccupancy(targetBoardSpace, this.gameObject)) {
+				if(targetBoardSpace > validGameBoardSpaces) {
+					gameController.AddStatus("Moving into a winning spot!");
+				} else if (!pathwayHandler.SetOccupancy(targetBoardSpace, this.gameObject)) {
 					gameController.AddStatus("Failed to set occupancy!");
 					throw new System.Exception("Failed to set occupancy!");
 				}
